@@ -13,3 +13,4 @@
     </tr>
   </c:forEach>
 </table>
+<a href="order-address">Enter shipping address</a>

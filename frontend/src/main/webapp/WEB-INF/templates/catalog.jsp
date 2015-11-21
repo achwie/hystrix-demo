@@ -22,3 +22,5 @@
     </tr>
   </c:forEach>
 </table>
+
+<div>View <a href="my-orders">my orders</a></div>

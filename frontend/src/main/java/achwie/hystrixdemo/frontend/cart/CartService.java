@@ -27,6 +27,10 @@ public class CartService {
   public ViewCart getCart(String userId) {
     List<CartItem> cartItems = cartRepo.getItemsForCart(userId);
 
-    return new ViewCart(cartItems);
+    return new ViewCart(userId, cartItems);
+  }
+
+  public void clearCart(String userId) {
+    cartRepo.clearCart(userId);
   }
 }
