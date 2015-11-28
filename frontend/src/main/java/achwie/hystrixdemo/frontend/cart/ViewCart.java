@@ -8,11 +8,9 @@ import java.util.List;
  * @author 11.11.2015, Achim Wiedemann
  */
 public class ViewCart {
-  private final String userId;
   private final List<CartItem> cartItems;
 
-  public ViewCart(String userId, List<CartItem> cartItems) {
-    this.userId = userId;
+  public ViewCart(List<CartItem> cartItems) {
     this.cartItems = cartItems;
   }
 
@@ -29,7 +27,7 @@ public class ViewCart {
     return totalCount;
   }
 
-  public String getUserId() {
-    return userId;
+  public boolean isEmpty() {
+    return getTotalItemCount() < 1;
   }
 }

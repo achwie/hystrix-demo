@@ -1,16 +1,28 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <h1>Cart</h1>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Quantity</th>
-  </tr>
-  <c:forEach items="${cart.items}" var="cartItem">
+<c:if test="${cart.isEmpty()}">
+  <p>Your cart is empty.</p>
+  <a href="catalog">Back to catalog</a>
+</c:if>
+<c:if test="${not cart.isEmpty()}">
+  <table>
     <tr>
-      <td><c:out value="${cartItem.product.name}" /></td>
-      <td><c:out value="${cartItem.quantity}" /></td>
+      <th>Name</th>
+      <th>Quantity</th>
     </tr>
-  </c:forEach>
-</table>
-<a href="order-address">Enter shipping address</a>
+    <c:forEach items="${cart.items}" var="cartItem">
+      <tr>
+        <td><c:out value="${cartItem.product.name}" /></td>
+        <td><c:out value="${cartItem.quantity}" /></td>
+      </tr>
+    </c:forEach>
+  </table>
+
+  <c:if test="${user.loggedIn}">
+    <a href="order-address">Enter shipping address</a>
+  </c:if>
+  <c:if test="${not user.loggedIn}">
+    <a href="login">Login to place order</a>
+  </c:if>
+</c:if>

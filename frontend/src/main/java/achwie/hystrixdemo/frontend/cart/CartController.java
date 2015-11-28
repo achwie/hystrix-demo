@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import achwie.hystrixdemo.frontend.auth.IdentityService;
+import achwie.hystrixdemo.frontend.auth.User;
 import achwie.hystrixdemo.frontend.product.Product;
 import achwie.hystrixdemo.frontend.product.ProductService;
 
@@ -32,21 +33,23 @@ public class CartController {
 
   @RequestMapping(value = "view-cart", method = RequestMethod.GET)
   public String viewCart(Model model, HttpServletRequest req) {
-    final String userId = idService.getUserId(req);
-    final ViewCart cart = cartService.getCart(userId);
+    final User user = idService.getSessionUser();
+    final String sessionId = idService.getSessionId();
+    final ViewCart cart = cartService.getCart(sessionId);
 
     model.addAttribute("cart", cart);
+    model.addAttribute("user", user);
 
     return "cart";
   }
 
   @RequestMapping(value = "add-to-cart", method = RequestMethod.POST)
   public String addToCart(@ModelAttribute ViewCartItem cartItem, Model model, HttpServletRequest req) {
-    final String userId = idService.getUserId(req);
+    final String sessionId = idService.getSessionId();
     final Product product = productService.getById(cartItem.getProductId());
 
     if (product != null) {
-      cartService.addToCart(userId, product, cartItem.getQuantity());
+      cartService.addToCart(sessionId, product, cartItem.getQuantity());
     } else {
       // TODO: User feedback
       System.err.println("Couldn't add unknown product to cart!" + cartItem);

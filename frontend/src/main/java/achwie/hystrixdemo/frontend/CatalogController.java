@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import achwie.hystrixdemo.frontend.auth.IdentityService;
+import achwie.hystrixdemo.frontend.auth.User;
 import achwie.hystrixdemo.frontend.cart.CartService;
 
 /**
@@ -31,10 +32,11 @@ public class CatalogController {
 
   @RequestMapping(method = RequestMethod.GET)
   public String getPerson(Model model, HttpServletRequest req) {
-    final String userId = idService.getUserId(req);
-
+    final User user = idService.getSessionUser();
+    final String sessionId = idService.getSessionId();
     model.addAttribute("products", catalogService.findAllProducts());
-    model.addAttribute("cart", cartService.getCart(userId));
+    model.addAttribute("cart", cartService.getCart(sessionId));
+    model.addAttribute("user", user);
     return "catalog";
   }
 }

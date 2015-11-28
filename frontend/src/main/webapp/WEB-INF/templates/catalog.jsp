@@ -1,8 +1,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <h1>Product Catalog</h1>
+<c:if test="${user.loggedIn}">
+  <div>You are logged in as <c:out value="${user.userName}" />. <a href="logout">Log out</a></div>
+</c:if>
+<c:if test="${not user.loggedIn}">
+  <div>You are not logged in. <a href="login">Log in</a></div>
+</c:if>
+<div><a href="view-cart">Items in cart: <c:out value="${cart.totalItemCount}" /></a></div>
 
-<div>Items in cart: <a href="view-cart"><c:out value="${cart.totalItemCount}" /></a></div>
-  
 <table>
   <tr>
     <th>Name</th>
@@ -23,4 +28,6 @@
   </c:forEach>
 </table>
 
-<div>View <a href="my-orders">my orders</a></div>
+<c:if test="${user.loggedIn}">
+  <div><a href="my-orders">View my orders</a></div>
+</c:if>

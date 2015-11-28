@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import achwie.hystrixdemo.frontend.auth.IdentityService;
+import achwie.hystrixdemo.frontend.auth.User;
 import achwie.hystrixdemo.frontend.cart.CartItem;
 import achwie.hystrixdemo.frontend.cart.CartService;
 import achwie.hystrixdemo.frontend.cart.ViewCart;
@@ -34,20 +35,30 @@ public class OrderController {
   }
 
   @RequestMapping(value = "order-address", method = RequestMethod.GET)
-  public String enterShippingAddress(Model model) {
+  public String enterShippingAddress() {
+    IdentityService.ensureAuthenticatedUser(idService, "enter shipping address");
+
     return "order-address";
   }
 
   @RequestMapping(value = "place-order", method = RequestMethod.POST)
   public String placeOrder(Model model, HttpServletRequest req) {
-    final String userId = idService.getUserId(req);
-    final ViewCart cart = cartService.getCart(userId);
+    final User user = IdentityService.ensureAuthenticatedUser(idService, "place order");
 
-    final Order order = createOrderFromCart(cart);
+    final String sessionId = idService.getSessionId();
+    final ViewCart cart = cartService.getCart(sessionId);
+
+    if (cart.isEmpty()) {
+      // TODO: Log
+      System.err.println("Can't place an order with an empty cart!");
+      return "redirect:order-address";
+    }
+
+    final Order order = createOrderFromCart(user.getId(), cart);
     final boolean success = orderService.placeOrder(order);
 
     if (success) {
-      cartService.clearCart(userId);
+      cartService.clearCart(sessionId);
     } else {
       // TODO: Handle failure
       System.out.println("Order could NOT be placed!");
@@ -57,13 +68,14 @@ public class OrderController {
   }
 
   @RequestMapping(value = "order-placed", method = RequestMethod.GET)
-  public String orderPlaced(Model model) {
+  public String orderPlaced() {
     return "order-placed";
   }
 
   @RequestMapping(value = "my-orders", method = RequestMethod.GET)
   public String viewOrders(Model model, HttpServletRequest req) {
-    final String userId = idService.getUserId(req);
+    final User user = IdentityService.ensureAuthenticatedUser(idService, "view my orders");
+    final String userId = user.getId();
     final List<Order> ordersForUser = orderService.getOrdersForUser(userId);
 
     model.addAttribute("orders", ordersForUser);
@@ -71,8 +83,8 @@ public class OrderController {
     return "my-orders";
   }
 
-  private Order createOrderFromCart(ViewCart cart) {
-    final Order order = new Order(cart.getUserId());
+  private Order createOrderFromCart(String userId, ViewCart cart) {
+    final Order order = new Order(userId);
 
     for (CartItem cartItem : cart.getItems())
       order.addOrderItem(createOrderItemFromCartItem(cartItem));

@@ -20,17 +20,17 @@ public class CartService {
     this.cartRepo = cartRepo;
   }
 
-  public void addToCart(String userId, Product product, int quantity) {
-    cartRepo.addToCart(userId, product, quantity);
+  public void addToCart(String cartId, Product product, int quantity) {
+    cartRepo.addToCart(cartId, product, quantity);
   }
 
-  public ViewCart getCart(String userId) {
-    List<CartItem> cartItems = cartRepo.getItemsForCart(userId);
+  public ViewCart getCart(String cartId) {
+    List<CartItem> cartItems = cartRepo.getItemsForCart(cartId);
 
-    return new ViewCart(userId, cartItems);
+    return new ViewCart(cartItems);
   }
 
-  public void clearCart(String userId) {
-    cartRepo.clearCart(userId);
+  public void clearCart(String cartId) {
+    cartRepo.clearCart(cartId);
   }
 }

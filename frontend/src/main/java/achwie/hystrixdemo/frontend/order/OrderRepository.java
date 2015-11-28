@@ -1,6 +1,7 @@
 package achwie.hystrixdemo.frontend.order;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,9 @@ public class OrderRepository {
   }
 
   public List<Order> getOrdersForUser(String userId) {
+    if (userId == null)
+      return Collections.emptyList();
+
     synchronized (lock) {
       return orders.stream().filter((order) -> userId.equals(order.getUserId())).collect(Collectors.toList());
     }
