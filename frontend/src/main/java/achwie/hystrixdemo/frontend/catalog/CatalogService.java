@@ -1,4 +1,4 @@
-package achwie.hystrixdemo.frontend;
+package achwie.hystrixdemo.frontend.catalog;
 
 import java.util.ArrayList;
 import java.util.List;

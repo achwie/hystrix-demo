@@ -1,4 +1,4 @@
-package achwie.hystrixdemo.frontend;
+package achwie.hystrixdemo.frontend.catalog;
 
 import javax.servlet.http.HttpServletRequest;
 
