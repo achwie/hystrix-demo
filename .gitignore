@@ -8,3 +8,6 @@
 
 # Compiled files
 */target/*
+
+# Local environment settings
+frontend/src/main/resources/services.properties

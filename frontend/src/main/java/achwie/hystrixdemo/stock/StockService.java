@@ -1,9 +1,11 @@
 package achwie.hystrixdemo.stock;
 
-import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * 
@@ -11,17 +13,20 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class StockService {
-  private final StockRepository stockRepo;
+  private final RestTemplate restTemplate = new RestTemplate();
+  private final String stockServiceBaseUrl;
 
   @Autowired
-  public StockService(StockRepository stockRepo) {
-    this.stockRepo = stockRepo;
+  public StockService(@Value("${service.stock.baseurl}") String stockServiceBaseUrl) {
+    this.stockServiceBaseUrl = stockServiceBaseUrl;
+
   }
 
   public int getStockQuantity(String productId) {
-    final int[] quantities = stockRepo.getQuantities(Arrays.asList(productId));
+    final String url = stockServiceBaseUrl + "/stock/{productId}";
+    final Integer quantity = restTemplate.getForObject(url, Integer.class, productId);
 
-    return quantities[0];
+    return quantity != null ? quantity.intValue() : 0;
   }
 
   /**
@@ -34,38 +39,39 @@ public class StockService {
    * @param quantities The quantities of the products to put a hold on.
    * @return {@code true} if a hold could be placed on all products in the
    *         requested quantities, {@code false} else.
-   * @throws IllegalArgumentException If one of the array if {@code null} or
+   * @throws IllegalArgumentException If one of the arrays is {@code null} or
    *           they differ in length.
    */
   public boolean putHoldOnAll(String[] productIds, int[] quantities) {
-    if (productIds == null || quantities == null || productIds.length != quantities.length) {
-      // TODO: More helpful message
-      throw new IllegalArgumentException("Neither product-ids or quantities must be null and both arrays need to have the same length!");
-    }
+    final PutProductsOnHoldRequest request = new PutProductsOnHoldRequest();
+    request.setProductIds(productIds);
+    request.setQuantities(quantities);
 
-    final String[] productIdsPlacedOnHold = new String[productIds.length];
-    final int[] quantitiesPlacedOnHold = new int[quantities.length];
+    final String url = stockServiceBaseUrl + "/stock/put-hold-on-all";
+    final ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
 
-    for (int i = 0; i < productIds.length; i++) {
-      final String productId = productIds[i];
-      final int quantity = quantities[i];
-
-      final int quantityPlacedOnHold = stockRepo.placeHoldOnAvailable(productId, quantity);
-
-      productIdsPlacedOnHold[i] = productId;
-      quantitiesPlacedOnHold[i] = quantityPlacedOnHold;
-
-      if (quantity != quantityPlacedOnHold) {
-        rollbackProductHolds(productIdsPlacedOnHold, quantitiesPlacedOnHold);
-        return false;
-      }
-    }
-
-    return true;
+    return response.getStatusCode() == HttpStatus.OK;
   }
 
-  private void rollbackProductHolds(String[] productIds, int[] quantities) {
-    for (int i = 0; i < productIds.length; i++)
-      stockRepo.removeHold(productIds[i], quantities[i]);
+  // ---------------------------------------------------------------------------
+  public static class PutProductsOnHoldRequest {
+    private String[] productIds;
+    private int[] quantities;
+
+    public String[] getProductIds() {
+      return productIds;
+    }
+
+    public void setProductIds(String[] productsIds) {
+      this.productIds = productsIds;
+    }
+
+    public int[] getQuantities() {
+      return quantities;
+    }
+
+    public void setQuantities(int[] quantities) {
+      this.quantities = quantities;
+    }
   }
 }
