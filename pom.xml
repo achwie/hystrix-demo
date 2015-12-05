@@ -11,6 +11,7 @@
 
   <modules>
     <module>frontend</module>
+    <module>stock</module>
   </modules>
   
 
