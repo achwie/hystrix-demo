@@ -2,7 +2,6 @@ package achwie.hystrixdemo.stock;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @RestController
-@RequestMapping(value = "/stock", produces = { MediaType.APPLICATION_JSON_VALUE })
+@RequestMapping("/stock")
 public class StockController {
   private final StockService stockService;
 
