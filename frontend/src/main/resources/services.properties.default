@@ -1,2 +1,3 @@
 # Stock service
 service.stock.baseurl = http://localhost:8080/hystrix-demo-stock
+service.product.baseurl = http://localhost:8080/hystrix-demo-product
