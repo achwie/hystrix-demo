@@ -1,4 +1,4 @@
-package achwie.hystrixdemo.product;
+package achwie.hystrixdemo.catalog;
 
 /**
  * 

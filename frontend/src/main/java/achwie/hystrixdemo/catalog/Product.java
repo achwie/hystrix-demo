@@ -1,4 +1,4 @@
-package achwie.hystrixdemo.product;
+package achwie.hystrixdemo.catalog;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

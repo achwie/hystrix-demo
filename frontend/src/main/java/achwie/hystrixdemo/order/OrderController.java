@@ -15,7 +15,7 @@ import achwie.hystrixdemo.auth.User;
 import achwie.hystrixdemo.cart.CartItem;
 import achwie.hystrixdemo.cart.CartService;
 import achwie.hystrixdemo.cart.ViewCart;
-import achwie.hystrixdemo.product.Product;
+import achwie.hystrixdemo.catalog.Product;
 
 /**
  * 

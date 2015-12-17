@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import achwie.hystrixdemo.auth.IdentityService;
 import achwie.hystrixdemo.auth.User;
-import achwie.hystrixdemo.product.Product;
-import achwie.hystrixdemo.product.ProductService;
+import achwie.hystrixdemo.catalog.CatalogService;
+import achwie.hystrixdemo.catalog.Product;
 
 /**
  * 
@@ -21,13 +21,13 @@ import achwie.hystrixdemo.product.ProductService;
 @Controller
 public class CartController {
   private final CartService cartService;
-  private final ProductService productService;
+  private final CatalogService catalogService;
   private final IdentityService idService;
 
   @Autowired
-  public CartController(CartService cartService, ProductService productService, IdentityService idService) {
+  public CartController(CartService cartService, CatalogService catalogService, IdentityService idService) {
     this.cartService = cartService;
-    this.productService = productService;
+    this.catalogService = catalogService;
     this.idService = idService;
   }
 
@@ -46,7 +46,7 @@ public class CartController {
   @RequestMapping(value = "add-to-cart", method = RequestMethod.POST)
   public String addToCart(@ModelAttribute ViewCartItem cartItem, Model model, HttpServletRequest req) {
     final String sessionId = idService.getSessionId();
-    final Product product = productService.getById(cartItem.getProductId());
+    final Product product = catalogService.getById(cartItem.getProductId());
 
     if (product != null) {
       cartService.addToCart(sessionId, product, cartItem.getQuantity());

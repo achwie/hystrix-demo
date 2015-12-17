@@ -1,6 +1,6 @@
 package achwie.hystrixdemo.cart;
 
-import achwie.hystrixdemo.product.Product;
+import achwie.hystrixdemo.catalog.Product;
 
 /**
  * 
