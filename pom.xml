@@ -12,7 +12,7 @@
   <modules>
     <module>frontend</module>
     <module>stock</module>
-    <module>product</module>
+    <module>catalog</module>
   </modules>
   
 

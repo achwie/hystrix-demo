@@ -23,7 +23,7 @@ public class StockService {
   }
 
   public int getStockQuantity(String productId) {
-    final String url = stockServiceBaseUrl + "/stock/{productId}";
+    final String url = stockServiceBaseUrl + "/{productId}";
     final Integer quantity = restTemplate.getForObject(url, Integer.class, productId);
 
     return quantity != null ? quantity.intValue() : 0;
@@ -47,7 +47,7 @@ public class StockService {
     request.setProductIds(productIds);
     request.setQuantities(quantities);
 
-    final String url = stockServiceBaseUrl + "/stock/put-hold-on-all";
+    final String url = stockServiceBaseUrl + "/put-hold-on-all";
     final ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
 
     return response.getStatusCode() == HttpStatus.OK;

@@ -41,7 +41,7 @@ public class CatalogService {
 
   public Product getById(String productId) {
     try {
-      String url = productServiceBaseUrl + "/products/" + UriUtils.encodePathSegment(productId, "UTF-8");
+      String url = productServiceBaseUrl + "/" + UriUtils.encodePathSegment(productId, "UTF-8");
       ResponseEntity<Product> productsResponse = restTemplate.getForEntity(url, Product.class);
       if (productsResponse.getStatusCode() == HttpStatus.OK) {
         return productsResponse.getBody();
@@ -59,7 +59,7 @@ public class CatalogService {
   }
 
   private List<Product> fetchAllProducts() {
-    final String url = productServiceBaseUrl + "/products";
+    final String url = productServiceBaseUrl;
     try {
       ResponseEntity<Product[]> productsResponse = restTemplate.getForEntity(url, Product[].class);
 

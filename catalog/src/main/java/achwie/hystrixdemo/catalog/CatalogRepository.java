@@ -1,4 +1,4 @@
-package achwie.hystrixdemo.product;
+package achwie.hystrixdemo.catalog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * @author 10.11.2015, Achim Wiedemann
  */
 @Component
-public class ProductRepository {
+public class CatalogRepository {
   private final List<Product> products = new ArrayList<>();
 
   {

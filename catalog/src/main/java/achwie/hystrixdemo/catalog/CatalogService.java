@@ -1,4 +1,4 @@
-package achwie.hystrixdemo.product;
+package achwie.hystrixdemo.catalog;
 
 import java.util.List;
 
@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 11.11.2015, Achim Wiedemann
  */
 @RestController
-@RequestMapping("/products")
-public class ProductService {
-  private final ProductRepository productRepo;
+@RequestMapping("/catalog")
+public class CatalogService {
+  private final CatalogRepository productRepo;
 
   @Autowired
-  public ProductService(ProductRepository productRepo) {
+  public CatalogService(CatalogRepository productRepo) {
     this.productRepo = productRepo;
   }
 

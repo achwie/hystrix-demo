@@ -9,7 +9,7 @@
     <version>0.1-SNAPSHOT</version>
   </parent>
   <groupId>achwie</groupId>
-  <artifactId>hystrix-demo-product</artifactId>
+  <artifactId>hystrix-demo-catalog</artifactId>
   <version>0.1-SNAPSHOT</version>
   <packaging>war</packaging>
 
