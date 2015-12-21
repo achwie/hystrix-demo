@@ -9,5 +9,8 @@
 # Compiled files
 */target/*
 
+# JGiven Reports
+acceptance-tests/jgiven-reports
+
 # Local environment settings
 frontend/src/main/resources/services.properties

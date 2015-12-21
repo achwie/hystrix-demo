@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,7 +44,7 @@ public class AuthController {
 
     if (user.isLoggedIn()) {
       idService.setSessionUser(user);
-      return (referrer != null) ? ("redirect:" + referrer) : "redirect:catalog";
+      return StringUtils.hasText(referrer) ? ("redirect:" + referrer) : "redirect:catalog";
     } else {
       return "redirect:login";
     }

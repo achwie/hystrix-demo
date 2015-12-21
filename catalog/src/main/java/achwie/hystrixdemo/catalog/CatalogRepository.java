@@ -1,10 +1,14 @@
 package achwie.hystrixdemo.catalog;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
+
+import achwie.hystrixdemo.util.SimpleCsvReader;
 
 /**
  * 
@@ -15,12 +19,14 @@ public class CatalogRepository {
   private final List<Product> products = new ArrayList<>();
 
   {
-    int id = 0;
-    products.add(new Product(String.valueOf(id++), "A <b>Book</b>"));
-    products.add(new Product(String.valueOf(id++), "A Coat"));
-    products.add(new Product(String.valueOf(id++), "A Knife"));
-    products.add(new Product(String.valueOf(id++), "An Umbrella"));
-    products.add(new Product(String.valueOf(id++), "A Hat"));
+    try (final InputStream is = CatalogRepository.class.getResourceAsStream("/test-data-catalog.csv")) {
+      SimpleCsvReader.readLines(is, values -> {
+        if (values.length == 2)
+          products.add(new Product(values[0], values[1]));
+      });
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public List<Product> findAllProducts() {

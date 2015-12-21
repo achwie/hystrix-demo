@@ -1,11 +1,14 @@
 package achwie.hystrixdemo.stock;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import org.springframework.stereotype.Component;
+
+import achwie.hystrixdemo.util.SimpleCsvReader;
 
 /**
  * 
@@ -14,8 +17,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class StockRepository {
   private final Object lock = new Object();
-  private final Random rand = new Random();
   private final Map<String, Integer> quantitiesByProduct = new HashMap<String, Integer>();
+
+  {
+    try (final InputStream is = StockRepository.class.getResourceAsStream("/test-data-stock.csv")) {
+      SimpleCsvReader.readLines(is, values -> {
+        if (values.length == 2)
+          quantitiesByProduct.put(values[0], Integer.valueOf(values[1]));
+      });
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
   public int[] getQuantities(List<String> productIds) {
     int[] quantities = new int[productIds.size()];
@@ -48,14 +61,8 @@ public class StockRepository {
 
   private int getQuantityForProduct(String productId) {
     synchronized (lock) {
-      Integer quantityForProduct = quantitiesByProduct.get(productId);
-
-      if (quantityForProduct == null) {
-        quantityForProduct = rand.nextInt(1000);
-        quantitiesByProduct.put(productId, quantityForProduct);
-      }
-
-      return quantityForProduct;
+      final Integer quantityForProduct = quantitiesByProduct.get(productId);
+      return (quantityForProduct != null) ? quantityForProduct : 0;
     }
   }
 }

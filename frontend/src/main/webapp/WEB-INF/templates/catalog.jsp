@@ -1,10 +1,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <h1>Product Catalog</h1>
 <c:if test="${user.loggedIn}">
-  <div>You are logged in as <c:out value="${user.userName}" />. <a href="logout">Log out</a></div>
+  <div id="loginStatus">You are logged in as <c:out value="${user.userName}" />. <a id="logoutLink" href="logout">Log out</a></div>
 </c:if>
 <c:if test="${not user.loggedIn}">
-  <div>You are not logged in. <a href="login">Log in</a></div>
+  <div id="loginStatus">You are not logged in. <a id="loginLink" href="login">Log in</a></div>
 </c:if>
 <div><a href="view-cart">Items in cart: <c:out value="${cart.totalItemCount}" /></a></div>
 
