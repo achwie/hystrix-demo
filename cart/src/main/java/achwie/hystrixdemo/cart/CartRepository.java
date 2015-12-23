@@ -8,8 +8,6 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import achwie.hystrixdemo.catalog.Product;
-
 /**
  * 
  * @author 11.11.2015, Achim Wiedemann
@@ -19,7 +17,7 @@ public class CartRepository {
   private final Object lock = new Object();
   private final Map<String, List<CartItem>> carts = new HashMap<>();
 
-  public void addToCart(String cartId, Product product, int quantity) {
+  public void addToCart(String cartId, String productId, int quantity) {
     synchronized (lock) {
       List<CartItem> itemsForCart = carts.get(cartId);
 
@@ -28,21 +26,21 @@ public class CartRepository {
         carts.put(cartId, itemsForCart);
       }
 
-      final CartItem cartItem = findCartItemForProduct(cartId, product);
+      final CartItem cartItem = findCartItemForProduct(cartId, productId);
       if (cartItem == null)
-        itemsForCart.add(new CartItem(product, quantity));
+        itemsForCart.add(new CartItem(productId, quantity));
       else
         cartItem.increaseQuantity(quantity);
     }
   }
 
-  public void removeFromCart(String cartId, Product product, int quantity) {
+  public void removeFromCart(String cartId, String productId, int quantity) {
     synchronized (lock) {
       List<CartItem> itemsForCart = carts.get(cartId);
       if (itemsForCart == null)
         return;
 
-      final CartItem cartItem = findCartItemForProduct(cartId, product);
+      final CartItem cartItem = findCartItemForProduct(cartId, productId);
       if (cartItem == null)
         return;
 
@@ -52,13 +50,13 @@ public class CartRepository {
     }
   }
 
-  private CartItem findCartItemForProduct(String cartId, Product product) {
+  private CartItem findCartItemForProduct(String cartId, String productId) {
     synchronized (lock) {
       final List<CartItem> itemsForCart = carts.get(cartId);
 
       if (itemsForCart != null)
         for (CartItem cartItem : itemsForCart)
-          if (cartItem.getProduct().getId().equals(product.getId()))
+          if (cartItem.getProductId().equals(productId))
             return cartItem;
 
       return null;
@@ -73,10 +71,11 @@ public class CartRepository {
     }
   }
 
-  public void clearCart(String userId) {
+  public void clearCart(String cartId) {
     synchronized (lock) {
-      final List<CartItem> cartItems = carts.get(userId);
-      cartItems.clear();
+      final List<CartItem> cartItems = carts.get(cartId);
+      if (cartItems != null)
+        cartItems.clear();
     }
   }
 }

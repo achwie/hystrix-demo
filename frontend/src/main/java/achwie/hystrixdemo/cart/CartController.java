@@ -35,7 +35,7 @@ public class CartController {
   public String viewCart(Model model, HttpServletRequest req) {
     final User user = idService.getSessionUser();
     final String sessionId = idService.getSessionId();
-    final ViewCart cart = cartService.getCart(sessionId);
+    final Cart cart = cartService.getCart(sessionId);
 
     model.addAttribute("cart", cart);
     model.addAttribute("user", user);

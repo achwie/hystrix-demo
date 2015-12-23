@@ -8,24 +8,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * 
- * @author 11.11.2015, Achim Wiedemann
+ * @author 23.12.2015, Achim Wiedemann
  */
-public class ViewCart {
-  private final List<ViewCartItem> cartItems;
+public class Cart {
+  private final List<CartItem> cartItems;
 
   @JsonCreator
-  public ViewCart(@JsonProperty("items") List<ViewCartItem> cartItems) {
+  public Cart(@JsonProperty("items") List<CartItem> cartItems) {
     this.cartItems = cartItems;
   }
 
-  public List<ViewCartItem> getItems() {
+  public List<CartItem> getItems() {
     return Collections.unmodifiableList(cartItems);
   }
 
   public int getTotalItemCount() {
     int totalCount = 0;
 
-    for (ViewCartItem cartItem : cartItems)
+    for (CartItem cartItem : cartItems)
       totalCount += cartItem.getQuantity();
 
     return totalCount;

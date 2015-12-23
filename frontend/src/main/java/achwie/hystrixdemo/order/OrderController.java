@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import achwie.hystrixdemo.auth.IdentityService;
 import achwie.hystrixdemo.auth.User;
+import achwie.hystrixdemo.cart.Cart;
 import achwie.hystrixdemo.cart.CartItem;
 import achwie.hystrixdemo.cart.CartService;
-import achwie.hystrixdemo.cart.ViewCart;
+import achwie.hystrixdemo.catalog.CatalogService;
 import achwie.hystrixdemo.catalog.Product;
 
 /**
@@ -25,12 +26,14 @@ import achwie.hystrixdemo.catalog.Product;
 public class OrderController {
   private final OrderService orderService;
   private final CartService cartService;
+  private final CatalogService catalogService;
   private final IdentityService idService;
 
   @Autowired
-  public OrderController(OrderService orderService, CartService cartService, IdentityService idService) {
+  public OrderController(OrderService orderService, CartService cartService, CatalogService catalogService, IdentityService idService) {
     this.orderService = orderService;
     this.cartService = cartService;
+    this.catalogService = catalogService;
     this.idService = idService;
   }
 
@@ -46,7 +49,7 @@ public class OrderController {
     final User user = IdentityService.ensureAuthenticatedUser(idService, "place order");
 
     final String sessionId = idService.getSessionId();
-    final ViewCart cart = cartService.getCart(sessionId);
+    final Cart cart = cartService.getCart(sessionId);
 
     if (cart.isEmpty()) {
       // TODO: Log
@@ -83,7 +86,7 @@ public class OrderController {
     return "my-orders";
   }
 
-  private Order createOrderFromCart(String userId, ViewCart cart) {
+  private Order createOrderFromCart(String userId, Cart cart) {
     final Order order = new Order(userId);
 
     for (CartItem cartItem : cart.getItems())
@@ -93,7 +96,8 @@ public class OrderController {
   }
 
   private OrderItem createOrderItemFromCartItem(CartItem cartItem) {
-    final Product product = cartItem.getProduct();
+    final String productId = cartItem.getProduct().getId();
+    final Product product = catalogService.getById(productId);
     final int quantity = cartItem.getQuantity();
 
     return new OrderItem(product.getId(), product.getName(), quantity);

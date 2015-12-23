@@ -7,8 +7,11 @@ import achwie.hystrixdemo.catalog.Product;
  * @author 11.11.2015, Achim Wiedemann
  */
 public class CartItem {
-  private final Product product;
+  private Product product;
   private int quantity;
+
+  public CartItem() {
+  }
 
   public CartItem(Product product, int quantity) {
     this.product = product;
@@ -19,15 +22,15 @@ public class CartItem {
     return product;
   }
 
+  public void setProduct(Product product) {
+    this.product = product;
+  }
+
   public int getQuantity() {
     return quantity;
   }
 
-  public void decreaseQuantity(int by) {
-    quantity = Math.max(0, quantity - by); // make sure to be > 0
-  }
-
-  public void increaseQuantity(int by) {
-    quantity = Math.max(0, quantity + by); // make sure to be > 0
+  public void setQuantity(int quantity) {
+    this.quantity = quantity;
   }
 }

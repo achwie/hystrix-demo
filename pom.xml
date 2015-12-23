@@ -13,6 +13,7 @@
     <module>frontend</module>
     <module>stock</module>
     <module>catalog</module>
+    <module>cart</module>
     <module>util</module>
   </modules>
   
