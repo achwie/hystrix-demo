@@ -28,7 +28,7 @@ public class CatalogService {
   private final StockService stockService;
 
   @Autowired
-  public CatalogService(@Value("${service.product.baseurl}") String productServiceBaseUrl, StockService stockService) {
+  public CatalogService(@Value("${service.catalog.baseurl}") String productServiceBaseUrl, StockService stockService) {
     this.productServiceBaseUrl = productServiceBaseUrl;
     this.stockService = stockService;
   }
