@@ -1,8 +1,5 @@
 package achwie.hystrixdemo.auth;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * 
  * @author 21.11.2015, Achim Wiedemann
@@ -12,8 +9,7 @@ public class User {
   private final String userId;
   private final String userName;
 
-  @JsonCreator
-  public User(@JsonProperty("id") String userId, @JsonProperty("userName") String userName) {
+  public User(String userId, String userName) {
     this.userId = userId;
     this.userName = userName;
   }

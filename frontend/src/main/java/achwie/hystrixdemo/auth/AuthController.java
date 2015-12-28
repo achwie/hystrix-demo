@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class AuthController {
   private final AuthService authService;
-  private final IdentityService idService;
+  private final SessionService sessionService;
 
   @Autowired
-  public AuthController(AuthService authService, IdentityService idService) {
+  public AuthController(AuthService authService, SessionService sessionService) {
     this.authService = authService;
-    this.idService = idService;
+    this.sessionService = sessionService;
   }
 
   @RequestMapping(value = "login", method = RequestMethod.GET)
@@ -40,10 +40,10 @@ public class AuthController {
     final String password = loginCreds.getPassword();
     final String referrer = loginCreds.getReferrer();
 
-    final User user = authService.findUser(username, password);
+    final User user = authService.login(username, password);
 
     if (user.isLoggedIn()) {
-      idService.setSessionUser(user);
+      sessionService.setSessionUser(user);
       return StringUtils.hasText(referrer) ? ("redirect:" + referrer) : "redirect:catalog";
     } else {
       return "redirect:login";
@@ -52,7 +52,8 @@ public class AuthController {
 
   @RequestMapping(value = "logout", method = RequestMethod.GET)
   public String performLogout(HttpServletRequest req) {
-    idService.destroySessionIdentity();
+    sessionService.removeSessionUser();
+    authService.logout();
 
     return "redirect:catalog";
   }

@@ -20,11 +20,11 @@ import org.springframework.stereotype.Component;
 // Intentionally didn't use Spring Security to keep it even more simple
 @Component("securityFilterProxy")
 public class SecurityFilterProxy implements Filter {
-  private final IdentityService idService;
+  private final SessionService sessionService;
 
   @Autowired
-  public SecurityFilterProxy(IdentityService idService) {
-    this.idService = idService;
+  public SecurityFilterProxy(SessionService sessionService) {
+    this.sessionService = sessionService;
   }
 
   @Override
@@ -35,11 +35,11 @@ public class SecurityFilterProxy implements Filter {
   public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
     try {
       if (req instanceof HttpServletRequest) {
-        idService.setServletRequestForCurrentThread((HttpServletRequest) req);
+        sessionService.setServletRequestForCurrentThread((HttpServletRequest) req);
       }
       chain.doFilter(req, res);
     } finally {
-      idService.removeServletRequestForCurrentThread();
+      sessionService.removeServletRequestForCurrentThread();
     }
   }
 

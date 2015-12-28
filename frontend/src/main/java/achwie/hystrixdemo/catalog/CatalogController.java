@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import achwie.hystrixdemo.auth.IdentityService;
+import achwie.hystrixdemo.auth.SessionService;
 import achwie.hystrixdemo.auth.User;
 import achwie.hystrixdemo.cart.CartService;
 
@@ -21,19 +21,19 @@ import achwie.hystrixdemo.cart.CartService;
 public class CatalogController {
   private final CatalogService catalogService;
   private final CartService cartService;
-  private final IdentityService idService;
+  private final SessionService sessionService;
 
   @Autowired
-  public CatalogController(CatalogService catalogService, CartService cartService, IdentityService idService) {
+  public CatalogController(CatalogService catalogService, CartService cartService, SessionService sessionService) {
     this.catalogService = catalogService;
     this.cartService = cartService;
-    this.idService = idService;
+    this.sessionService = sessionService;
   }
 
   @RequestMapping(method = RequestMethod.GET)
   public String getPerson(Model model, HttpServletRequest req) {
-    final User user = idService.getSessionUser();
-    final String sessionId = idService.getSessionId();
+    final User user = sessionService.getSessionUser();
+    final String sessionId = sessionService.getSessionId();
     model.addAttribute("products", catalogService.findAllProducts());
     model.addAttribute("cart", cartService.getCart(sessionId));
     model.addAttribute("user", user);

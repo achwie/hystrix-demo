@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component;
  * @author 19.11.2015, Achim Wiedemann
  */
 @Component
-public class IdentityService {
+public class SessionService {
   private ThreadLocal<HttpServletRequest> servletRequests = new ThreadLocal<>();
-  public static final String SESSION_KEY_IDENTITY = "IdentityService.IDENTITY";
+  public static final String SESSION_KEY_IDENTITY = "SessionService.IDENTITY";
 
   /**
    * <p>
-   * <strong>NOTE:</strong> This method must only be performed on the
+   * <strong>NOTE:</strong> This method must only be executed on the
    * request-thread!
    * </p>
    * 
@@ -35,7 +35,7 @@ public class IdentityService {
 
   /**
    * <p>
-   * <strong>NOTE:</strong> This method must only be performed on the
+   * <strong>NOTE:</strong> This method must only be executed on the
    * request-thread!
    * </p>
    * 
@@ -51,27 +51,13 @@ public class IdentityService {
 
   /**
    * <p>
-   * <strong>NOTE:</strong> This method must only be performed on the
-   * request-thread!
-   * </p>
-   */
-  public void destroySessionIdentity() {
-    final HttpServletRequest req = servletRequests.get();
-    if (req == null)
-      return;
-
-    req.getSession().removeAttribute(SESSION_KEY_IDENTITY);
-  }
-
-  /**
-   * <p>
-   * <strong>NOTE:</strong> This method must only be performed on the
+   * <strong>NOTE:</strong> This method must only be executed on the
    * request-thread!
    * </p>
    * 
    * @return
    */
-  public static User ensureAuthenticatedUser(IdentityService idService, String operationName) {
+  public static User ensureAuthenticatedUser(SessionService idService, String operationName) {
     final User user = idService.getSessionUser();
 
     if (user.isLoggedIn())
@@ -82,7 +68,7 @@ public class IdentityService {
 
   /**
    * <p>
-   * <strong>NOTE:</strong> This method must only be performed on the
+   * <strong>NOTE:</strong> This method must only be executed on the
    * request-thread!
    * </p>
    */
@@ -101,7 +87,21 @@ public class IdentityService {
 
   /**
    * <p>
-   * <strong>NOTE:</strong> This method must only be performed on the
+   * <strong>NOTE:</strong> This method must only be executed on the
+   * request-thread!
+   * </p>
+   */
+  void removeSessionUser() {
+    final HttpServletRequest req = servletRequests.get();
+    if (req == null)
+      return;
+
+    req.getSession().removeAttribute(SESSION_KEY_IDENTITY);
+  }
+
+  /**
+   * <p>
+   * <strong>NOTE:</strong> This method must only be executed on the
    * request-thread!
    * </p>
    */
@@ -111,7 +111,7 @@ public class IdentityService {
 
   /**
    * <p>
-   * <strong>NOTE:</strong> This method must only be performed on the
+   * <strong>NOTE:</strong> This method must only be executed on the
    * request-thread!
    * </p>
    */

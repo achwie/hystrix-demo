@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import achwie.hystrixdemo.auth.IdentityService;
+import achwie.hystrixdemo.auth.SessionService;
 import achwie.hystrixdemo.auth.User;
 import achwie.hystrixdemo.cart.Cart;
 import achwie.hystrixdemo.cart.CartItem;
@@ -27,28 +27,28 @@ public class OrderController {
   private final OrderService orderService;
   private final CartService cartService;
   private final CatalogService catalogService;
-  private final IdentityService idService;
+  private final SessionService sessionService;
 
   @Autowired
-  public OrderController(OrderService orderService, CartService cartService, CatalogService catalogService, IdentityService idService) {
+  public OrderController(OrderService orderService, CartService cartService, CatalogService catalogService, SessionService sessionService) {
     this.orderService = orderService;
     this.cartService = cartService;
     this.catalogService = catalogService;
-    this.idService = idService;
+    this.sessionService = sessionService;
   }
 
   @RequestMapping(value = "order-address", method = RequestMethod.GET)
   public String enterShippingAddress() {
-    IdentityService.ensureAuthenticatedUser(idService, "enter shipping address");
+    SessionService.ensureAuthenticatedUser(sessionService, "enter shipping address");
 
     return "order-address";
   }
 
   @RequestMapping(value = "place-order", method = RequestMethod.POST)
   public String placeOrder(Model model, HttpServletRequest req) {
-    final User user = IdentityService.ensureAuthenticatedUser(idService, "place order");
+    final User user = SessionService.ensureAuthenticatedUser(sessionService, "place order");
 
-    final String sessionId = idService.getSessionId();
+    final String sessionId = sessionService.getSessionId();
     final Cart cart = cartService.getCart(sessionId);
 
     if (cart.isEmpty()) {
@@ -77,7 +77,7 @@ public class OrderController {
 
   @RequestMapping(value = "my-orders", method = RequestMethod.GET)
   public String viewOrders(Model model, HttpServletRequest req) {
-    final User user = IdentityService.ensureAuthenticatedUser(idService, "view my orders");
+    final User user = SessionService.ensureAuthenticatedUser(sessionService, "view my orders");
     final String userId = user.getId();
     final List<Order> ordersForUser = orderService.getOrdersForUser(userId);
 

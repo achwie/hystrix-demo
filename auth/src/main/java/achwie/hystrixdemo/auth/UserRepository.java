@@ -1,9 +1,13 @@
 package achwie.hystrixdemo.auth;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
+
+import achwie.hystrixdemo.util.SimpleCsvReader;
 
 /**
  * 
@@ -14,8 +18,20 @@ import org.springframework.stereotype.Component;
 public class UserRepository {
   private final Map<String, User> users = new HashMap<>();
 
-  public UserRepository() {
-    initTestData();
+  {
+    try (final InputStream is = UserRepository.class.getResourceAsStream("/test-data-users.csv")) {
+      SimpleCsvReader.readLines(is, values -> {
+        if (values.length != 3)
+          return;
+
+        String id = values[0];
+        String name = values[1];
+        String pass = values[2];
+        users.put(key(name, pass), new User(id, name));
+      });
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public User findUserByCredentials(String username, String password) {
@@ -26,15 +42,5 @@ public class UserRepository {
 
   private String key(String username, String password) {
     return username + ":" + password;
-  }
-
-  private void initTestData() {
-    final User john = new User("1", "john");
-    final User jane = new User("2", "jane");
-    final User test = new User("3", "test");
-
-    users.put(key(john.getUserName(), "doe"), john);
-    users.put(key(jane.getUserName(), "doe"), jane);
-    users.put(key(test.getUserName(), "test"), test);
   }
 }
