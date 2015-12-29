@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import achwie.hystrixdemo.cart.CartService;
+
 /**
  * 
  * @author 21.11.2015, Achim Wiedemann
@@ -18,11 +20,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class AuthController {
   private final AuthService authService;
   private final SessionService sessionService;
+  private final CartService cartService;
 
   @Autowired
-  public AuthController(AuthService authService, SessionService sessionService) {
+  public AuthController(AuthService authService, SessionService sessionService, CartService cartService) {
     this.authService = authService;
     this.sessionService = sessionService;
+    this.cartService = cartService;
   }
 
   @RequestMapping(value = "login", method = RequestMethod.GET)
@@ -52,6 +56,9 @@ public class AuthController {
 
   @RequestMapping(value = "logout", method = RequestMethod.GET)
   public String performLogout(HttpServletRequest req) {
+    final String sessionId = sessionService.getSessionId();
+
+    cartService.clearCart(sessionId);
     sessionService.removeSessionUser();
     authService.logout();
 
