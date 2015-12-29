@@ -60,7 +60,9 @@ public class AuthService {
 
   // ---------------------------------------------------------------------------
   private static final class LoginRequest {
+    @SuppressWarnings("unused") // Field gets serialized
     public final String username;
+    @SuppressWarnings("unused") // Field gets serialized
     public final String password;
 
     public LoginRequest(String username, String password) {
