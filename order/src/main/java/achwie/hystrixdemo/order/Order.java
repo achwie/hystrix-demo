@@ -1,26 +1,22 @@
 package achwie.hystrixdemo.order;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * 
  * @author 20.11.2015, Achim Wiedemann
  */
+// TODO: Add shipping address
 public class Order {
   private final String userId;
-  private final List<OrderItem> orderItems;
-  private final Calendar orderDate;
+  private final List<OrderItem> orderItems = new ArrayList<>();
+  private final Calendar orderDate = Calendar.getInstance();
 
-  @JsonCreator
-  public Order(@JsonProperty("userId") String userId, @JsonProperty("orderItems") List<OrderItem> orderItems, @JsonProperty("orderDate") Calendar orderDate) {
+  public Order(String userId) {
     this.userId = userId;
-    this.orderItems = (orderItems != null) ? orderItems : Collections.emptyList();
-    this.orderDate = orderDate;
   }
 
   public void addOrderItem(OrderItem item) {
@@ -40,7 +36,7 @@ public class Order {
     return copy;
   }
 
-  public Object getUserId() {
+  public String getUserId() {
     return userId;
   }
 }

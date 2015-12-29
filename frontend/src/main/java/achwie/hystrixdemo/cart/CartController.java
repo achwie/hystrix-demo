@@ -44,7 +44,7 @@ public class CartController {
   }
 
   @RequestMapping(value = "add-to-cart", method = RequestMethod.POST)
-  public String addToCart(@ModelAttribute ViewCartItem cartItem, Model model, HttpServletRequest req) {
+  public String addToCart(@ModelAttribute CartItem cartItem, Model model, HttpServletRequest req) {
     final String sessionId = sessionService.getSessionId();
     final Product product = catalogService.getById(cartItem.getProductId());
 

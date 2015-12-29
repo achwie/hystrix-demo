@@ -1,8 +1,5 @@
 package achwie.hystrixdemo.order;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * 
  * @author 21.11.2015, Achim Wiedemann
@@ -12,8 +9,7 @@ public class OrderItem {
   private final String productName;
   private final int quantity;
 
-  @JsonCreator
-  public OrderItem(@JsonProperty("productId") String productId, @JsonProperty("productName") String productName, @JsonProperty("quantity") int quantity) {
+  public OrderItem(String productId, String productName, int quantity) {
     this.productId = productId;
     this.productName = productName;
     this.quantity = quantity;

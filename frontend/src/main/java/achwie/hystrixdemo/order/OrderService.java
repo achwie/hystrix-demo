@@ -1,11 +1,16 @@
 package achwie.hystrixdemo.order;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
-import achwie.hystrixdemo.stock.StockService;
+import achwie.hystrixdemo.cart.Cart;
 
 /**
  * 
@@ -14,35 +19,27 @@ import achwie.hystrixdemo.stock.StockService;
  */
 @Component
 public class OrderService {
-  private final OrderRepository orderRepo;
-  private final StockService stockService;
+  private final RestTemplate restTemplate = new RestTemplate();
+  private final String orderServiceBaseUrl;
 
   @Autowired
-  public OrderService(OrderRepository orderRepo, StockService stockService) {
-    this.orderRepo = orderRepo;
-    this.stockService = stockService;
+  public OrderService(@Value("${service.order.baseurl}") String orderServiceBaseUrl) {
+    this.orderServiceBaseUrl = orderServiceBaseUrl;
   }
 
-  public boolean placeOrder(Order order) {
-    final List<OrderItem> orderItems = order.getOrderItems();
-    final String[] productIds = new String[orderItems.size()];
-    final int[] quantities = new int[orderItems.size()];
+  public boolean placeOrder(String sessionId, Cart cart) {
+    final String url = orderServiceBaseUrl + "/" + sessionId;
 
-    for (int i = 0; i < orderItems.size(); i++) {
-      final OrderItem orderItem = orderItems.get(i);
-      productIds[i] = orderItem.getProductId();
-      quantities[i] = orderItem.getQuantity();
-    }
+    final ResponseEntity<String> response = restTemplate.postForEntity(url, cart, String.class);
 
-    final boolean success = stockService.putHoldOnAll(productIds, quantities);
-
-    if (success)
-      orderRepo.addOrder(order);
-
-    return success;
+    return (response.getStatusCode() == HttpStatus.OK);
   }
 
-  public List<Order> getOrdersForUser(String userId) {
-    return orderRepo.getOrdersForUser(userId);
+  public List<Order> getOrdersForUser(String sessionId) {
+    final String url = orderServiceBaseUrl + "/" + sessionId;
+
+    final Order[] orders = restTemplate.getForObject(url, Order[].class);
+
+    return Arrays.asList(orders);
   }
 }

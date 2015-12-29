@@ -20,8 +20,8 @@ public class CartService {
     this.cartRepo = cartRepo;
   }
 
-  public void addToCart(String cartId, String productId, int quantity) {
-    cartRepo.addToCart(cartId, productId, quantity);
+  public void addToCart(String cartId, String productId, String productName, int quantity) {
+    cartRepo.addToCart(cartId, productId, productName, quantity);
   }
 
   public Cart getCart(String cartId) {

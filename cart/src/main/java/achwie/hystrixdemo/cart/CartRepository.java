@@ -17,7 +17,7 @@ public class CartRepository {
   private final Object lock = new Object();
   private final Map<String, List<CartItem>> carts = new HashMap<>();
 
-  public void addToCart(String cartId, String productId, int quantity) {
+  public void addToCart(String cartId, String productId, String productName, int quantity) {
     synchronized (lock) {
       List<CartItem> itemsForCart = carts.get(cartId);
 
@@ -28,7 +28,7 @@ public class CartRepository {
 
       final CartItem cartItem = findCartItemForProduct(cartId, productId);
       if (cartItem == null)
-        itemsForCart.add(new CartItem(productId, quantity));
+        itemsForCart.add(new CartItem(productId, productName, quantity));
       else
         cartItem.increaseQuantity(quantity);
     }

@@ -9,3 +9,6 @@ service.cart.baseurl = http://localhost:8080/hystrix-demo-cart/cart
 
 # Authentication service
 service.auth.baseurl = http://localhost:8080/hystrix-demo-auth/auth
+
+# Order service
+service.order.baseurl = http://localhost:8080/hystrix-demo-order/orders

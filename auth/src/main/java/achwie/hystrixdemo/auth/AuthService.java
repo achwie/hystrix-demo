@@ -29,8 +29,9 @@ public class AuthService {
     }
 
     synchronized (lock) {
-      if (sessions.containsKey(sessionId))
-        throw new IllegalStateException("Can't create new session for existing ID!");
+      final User userForSession = sessions.get(sessionId);
+      if (userForSession != null && !userForSession.getUserName().equals(username))
+        throw new IllegalStateException("Can't pick up existing session for different user!");
 
       sessions.put(sessionId, user);
     }

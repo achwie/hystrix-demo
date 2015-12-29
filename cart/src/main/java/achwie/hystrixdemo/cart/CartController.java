@@ -35,7 +35,7 @@ public class CartController {
   @RequestMapping(value = "/{cartId}", method = RequestMethod.POST)
   public ResponseEntity<String> addToCart(@PathVariable String cartId, @RequestBody CartItem cartItem) {
     if (cartItem != null && cartItem.getProductId() != null) {
-      cartService.addToCart(cartId, cartItem.getProductId(), cartItem.getQuantity());
+      cartService.addToCart(cartId, cartItem.getProductId(), cartItem.getProductName(), cartItem.getQuantity());
       return new ResponseEntity<String>("OK", HttpStatus.OK);
     } else {
       return new ResponseEntity<String>("Invalid request!", HttpStatus.BAD_REQUEST);

@@ -1,4 +1,4 @@
-package achwie.hystrixdemo.cart;
+package achwie.hystrixdemo.order;
 
 import java.util.Collections;
 import java.util.List;
@@ -15,23 +15,14 @@ public class Cart {
 
   @JsonCreator
   public Cart(@JsonProperty("items") List<CartItem> cartItems) {
-    this.cartItems = cartItems;
+    this.cartItems = (cartItems != null) ? cartItems : Collections.emptyList();
   }
 
   public List<CartItem> getItems() {
     return Collections.unmodifiableList(cartItems);
   }
 
-  public int getTotalItemCount() {
-    int totalCount = 0;
-
-    for (CartItem cartItem : cartItems)
-      totalCount += cartItem.getQuantity();
-
-    return totalCount;
-  }
-
   public boolean isEmpty() {
-    return getTotalItemCount() < 1;
+    return cartItems.isEmpty();
   }
 }

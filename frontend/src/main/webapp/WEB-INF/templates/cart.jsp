@@ -13,7 +13,7 @@
     </tr>
     <c:forEach items="${cart.items}" var="cartItem">
       <tr>
-        <td><c:out value="${cartItem.product.name}" /></td>
+        <td><c:out value="${cartItem.productName}" /></td>
         <td><c:out value="${cartItem.quantity}" /></td>
       </tr>
     </c:forEach>
