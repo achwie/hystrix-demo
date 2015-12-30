@@ -13,7 +13,7 @@ public class OrderItem {
   private final int quantity;
 
   @JsonCreator
-  public OrderItem(@JsonProperty("productId") String productId, @JsonProperty("productName") String productName, @JsonProperty("quantity") int quantity) {
+  OrderItem(@JsonProperty("productId") String productId, @JsonProperty("productName") String productName, @JsonProperty("quantity") int quantity) {
     this.productId = productId;
     this.productName = productName;
     this.quantity = quantity;

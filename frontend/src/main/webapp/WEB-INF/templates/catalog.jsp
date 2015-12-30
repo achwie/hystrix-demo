@@ -14,13 +14,13 @@
     <th>Stock</th>
     <th>Action</th>
   </tr>
-  <c:forEach items="${products}" var="product">
+  <c:forEach items="${catalogItems}" var="catalogItem">
     <tr>
-      <td><c:out value="${product.name}" /></td>
-      <td><c:out value="${product.stockQuantity}" /></td>
+      <td><c:out value="${catalogItem.name}" /></td>
+      <td><c:out value="${catalogItem.stockQuantity}" /></td>
       <td>
         <form action="add-to-cart" method="POST">
-          <input type="hidden" name="productId" value="${product.id}" />
+          <input type="hidden" name="productId" value="${catalogItem.id}" />
           <input type="hidden" name="quantity" value="1" size="2"/> <button type="submit">Add to Cart</button>
         </form>
       </td>

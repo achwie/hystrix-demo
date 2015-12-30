@@ -13,7 +13,7 @@ public class User {
   private final String userName;
 
   @JsonCreator
-  public User(@JsonProperty("id") String userId, @JsonProperty("userName") String userName) {
+  User(@JsonProperty("id") String userId, @JsonProperty("userName") String userName) {
     this.userId = userId;
     this.userName = userName;
   }

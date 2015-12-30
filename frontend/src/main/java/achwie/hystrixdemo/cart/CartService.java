@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import achwie.hystrixdemo.catalog.Product;
+import achwie.hystrixdemo.catalog.CatalogItem;
 
 /**
  * 
@@ -23,10 +23,10 @@ public class CartService {
     this.cartServiceBaseUrl = cartServiceBaseUrl;
   }
 
-  public void addToCart(String cartId, Product product, int quantity) {
+  public void addToCart(String cartId, CatalogItem catalogItem, int quantity) {
     final String url = cartServiceBaseUrl + "/" + cartId;
 
-    final CartItem cartItem = new CartItem(product.getId(), product.getName(), quantity);
+    final CartItem cartItem = new CartItem(catalogItem.getId(), catalogItem.getName(), quantity);
 
     final ResponseEntity<String> response = restTemplate.postForEntity(url, cartItem, String.class);
 

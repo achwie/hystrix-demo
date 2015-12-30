@@ -1,7 +1,6 @@
 package achwie.hystrixdemo.catalog;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -15,8 +14,6 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriUtils;
 
-import achwie.hystrixdemo.stock.StockService;
-
 /**
  * 
  * @author 11.11.2015, Achim Wiedemann
@@ -25,43 +22,16 @@ import achwie.hystrixdemo.stock.StockService;
 public class CatalogService {
   private final RestTemplate restTemplate = new RestTemplate();
   private final String productServiceBaseUrl;
-  private final StockService stockService;
 
   @Autowired
-  public CatalogService(@Value("${service.catalog.baseurl}") String productServiceBaseUrl, StockService stockService) {
+  public CatalogService(@Value("${service.catalog.baseurl}") String productServiceBaseUrl) {
     this.productServiceBaseUrl = productServiceBaseUrl;
-    this.stockService = stockService;
   }
 
-  public List<ViewProduct> findAllProducts() {
-    final List<Product> products = fetchAllProducts();
-
-    return toViewProducts(products);
-  }
-
-  public Product getById(String productId) {
-    try {
-      String url = productServiceBaseUrl + "/" + UriUtils.encodePathSegment(productId, "UTF-8");
-      ResponseEntity<Product> productsResponse = restTemplate.getForEntity(url, Product.class);
-      if (productsResponse.getStatusCode() == HttpStatus.OK) {
-        return productsResponse.getBody();
-      } else {
-        // TODO: Log
-        System.err.println(String.format("ERROR: Couldn't get product using URL %s!", url));
-      }
-    } catch (UnsupportedEncodingException e) {
-      // TODO: Log
-      System.err.println("ERROR: Could not create URL for fetching product!");
-      e.printStackTrace();
-    }
-
-    return null;
-  }
-
-  private List<Product> fetchAllProducts() {
+  public List<CatalogItem> findAll() {
     final String url = productServiceBaseUrl;
     try {
-      ResponseEntity<Product[]> productsResponse = restTemplate.getForEntity(url, Product[].class);
+      ResponseEntity<CatalogItem[]> productsResponse = restTemplate.getForEntity(url, CatalogItem[].class);
 
       if (productsResponse.getStatusCode() == HttpStatus.OK) {
         return Arrays.asList(productsResponse.getBody());
@@ -71,21 +41,26 @@ public class CatalogService {
       e.printStackTrace();
     }
     // TODO: Log
-    System.err.println(String.format("ERROR: Couldn't get products using URL %s!", url));
+    System.err.println(String.format("ERROR: Couldn't get catalog-items using URL %s!", url));
     return Collections.emptyList();
   }
 
-  private List<ViewProduct> toViewProducts(List<Product> products) {
-    final List<ViewProduct> viewProducts = new ArrayList<>();
-    for (Product p : products) {
-      final ViewProduct viewProduct = new ViewProduct();
-      viewProduct.setId(p.getId());
-      viewProduct.setName(p.getName());
-      viewProduct.setStockQuantity(stockService.getStockQuantity(p.getId()));
-
-      viewProducts.add(viewProduct);
+  public CatalogItem findById(String itemId) {
+    try {
+      String url = productServiceBaseUrl + "/" + UriUtils.encodePathSegment(itemId, "UTF-8");
+      ResponseEntity<CatalogItem> catalogResponse = restTemplate.getForEntity(url, CatalogItem.class);
+      if (catalogResponse.getStatusCode() == HttpStatus.OK) {
+        return catalogResponse.getBody();
+      } else {
+        // TODO: Log
+        System.err.println(String.format("ERROR: Couldn't get catalog-item using URL %s!", url));
+      }
+    } catch (UnsupportedEncodingException e) {
+      // TODO: Log
+      System.err.println("ERROR: Could not create URL for fetching catalog-items!");
+      e.printStackTrace();
     }
 
-    return viewProducts;
+    return null;
   }
 }

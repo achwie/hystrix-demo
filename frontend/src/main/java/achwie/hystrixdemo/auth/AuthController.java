@@ -39,7 +39,7 @@ public class AuthController {
   }
 
   @RequestMapping(value = "login", method = RequestMethod.POST)
-  public String performLogin(@ModelAttribute ViewLoginCredentials loginCreds, HttpServletRequest req) {
+  public String performLogin(@ModelAttribute LoginCredentials loginCreds, HttpServletRequest req) {
     final String username = loginCreds.getUsername();
     final String password = loginCreds.getPassword();
     final String referrer = loginCreds.getReferrer();

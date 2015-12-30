@@ -4,7 +4,7 @@ package achwie.hystrixdemo.auth;
  * 
  * @author 21.11.2015, Achim Wiedemann
  */
-public class ViewLoginCredentials {
+public class LoginCredentials {
   private String username;
   private String password;
   private String referrer;

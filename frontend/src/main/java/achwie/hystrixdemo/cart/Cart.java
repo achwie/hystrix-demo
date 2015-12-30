@@ -14,7 +14,7 @@ public class Cart {
   private final List<CartItem> cartItems;
 
   @JsonCreator
-  public Cart(@JsonProperty("items") List<CartItem> cartItems) {
+  Cart(@JsonProperty("items") List<CartItem> cartItems) {
     this.cartItems = cartItems;
   }
 

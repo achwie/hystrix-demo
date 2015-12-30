@@ -1,27 +1,35 @@
 package achwie.hystrixdemo.catalog;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * 
- * @author 10.11.2015, Achim Wiedemann
+ * @author 11.11.2015, Achim Wiedemann
  */
 public class Product {
-  private final String id;
-  private final String name;
-
-  @JsonCreator
-  public Product(@JsonProperty("id") String id, @JsonProperty("name") String name) {
-    this.id = id;
-    this.name = name;
-  }
+  private String id;
+  private String name;
+  private int stockQuantity;
 
   public String getId() {
     return id;
   }
 
+  public void setId(String id) {
+    this.id = id;
+  }
+
   public String getName() {
     return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public int getStockQuantity() {
+    return stockQuantity;
+  }
+
+  public void setStockQuantity(int quantity) {
+    this.stockQuantity = quantity;
   }
 }

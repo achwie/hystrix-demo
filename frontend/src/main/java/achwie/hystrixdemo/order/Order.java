@@ -17,7 +17,7 @@ public class Order {
   private final Calendar orderDate;
 
   @JsonCreator
-  public Order(@JsonProperty("userId") String userId, @JsonProperty("orderItems") List<OrderItem> orderItems, @JsonProperty("orderDate") Calendar orderDate) {
+  Order(@JsonProperty("userId") String userId, @JsonProperty("orderItems") List<OrderItem> orderItems, @JsonProperty("orderDate") Calendar orderDate) {
     this.userId = userId;
     this.orderItems = (orderItems != null) ? orderItems : Collections.emptyList();
     this.orderDate = orderDate;
