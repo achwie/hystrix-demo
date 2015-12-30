@@ -16,6 +16,7 @@
     <module>cart</module>
     <module>auth</module>
     <module>order</module>
+    <module>service-urls</module>
     <module>util</module>
   </modules>
   

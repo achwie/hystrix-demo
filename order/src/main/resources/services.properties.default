@@ -1,5 +1,0 @@
-# Stock service
-service.stock.baseurl = http://localhost:8080/hystrix-demo-stock/stock
-
-# Authentication service
-service.auth.baseurl = http://localhost:8080/hystrix-demo-auth/auth
