@@ -21,7 +21,6 @@ import achwie.hystrixdemo.stock.StockService;
  * @author 10.11.2015, Achim Wiedemann
  */
 @Controller
-@RequestMapping("/catalog")
 public class CatalogController {
   private final CatalogService catalogService;
   private final CartService cartService;
@@ -36,8 +35,13 @@ public class CatalogController {
     this.sessionService = sessionService;
   }
 
-  @RequestMapping(method = RequestMethod.GET)
-  public String getPerson(Model model, HttpServletRequest req) {
+  @RequestMapping("/")
+  public String entryPage(Model model, HttpServletRequest req) {
+    return "redirect:catalog";
+  }
+
+  @RequestMapping(value = "/catalog", method = RequestMethod.GET)
+  public String viewCatalog(Model model, HttpServletRequest req) {
     final User user = sessionService.getSessionUser();
     final String sessionId = sessionService.getSessionId();
     model.addAttribute("catalogItems", toCatalogItems(catalogService.findAll()));
