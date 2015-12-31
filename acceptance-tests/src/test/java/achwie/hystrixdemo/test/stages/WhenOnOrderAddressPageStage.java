@@ -1,6 +1,5 @@
 package achwie.hystrixdemo.test.stages;
 
-import com.tngtech.jgiven.Stage;
 import com.tngtech.jgiven.annotation.ScenarioStage;
 import com.tngtech.jgiven.annotation.ScenarioState;
 
@@ -11,7 +10,7 @@ import achwie.hystrixdemo.test.pages.OrderAddressPage;
  * @author 30.12.2015, Achim Wiedemann
  *
  */
-public class WhenOnOrderAddressPageStage extends Stage<WhenOnOrderAddressPageStage> {
+public class WhenOnOrderAddressPageStage extends WhenBaseStage<WhenOnOrderAddressPageStage> {
   public static final String SOME_ADDRESS_NAME = "John Doe";
   public static final String SOME_ADDRESS_ADDRESS = "102-3456 Dough St";
   public static final String SOME_ADDRESS_CITY = "St. Johns  NL";

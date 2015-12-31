@@ -3,4 +3,4 @@
 
 <p>Your order has been placed successfully!</p>
 
-<p><a href="catalog">Back to catalog</a></p>
+<p><a id="catalog-link" href="catalog">Back to catalog</a></p>

@@ -21,7 +21,7 @@ public class GivenStage extends Stage<GivenStage> {
   @ScenarioRule
   private final PageFactoryResource pageFactory = new PageFactoryResource();
   @ScenarioStage
-  private GivenOnCatalogPageStage givenOnCatalogPageStage;
+  private GivenOnCatalogPageStage catalogStage;
   @ScenarioState
   private CatalogPage catalogPage;
   @ScenarioState
@@ -47,7 +47,7 @@ public class GivenStage extends Stage<GivenStage> {
 
   public GivenOnCatalogPageStage user_is_on_catalog_page() {
     catalogPage.openPage();
-    return givenOnCatalogPageStage;
+    return catalogStage;
   }
 
   public GivenStage user_is_on_login_page() {

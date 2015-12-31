@@ -1,6 +1,8 @@
 package achwie.hystrixdemo.test.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 /**
  * 
@@ -22,5 +24,10 @@ public class OrderPlacedPage {
 
   private String pageUrl() {
     return baseUrl + "/order-placed";
+  }
+
+  public void clickBackToCatalog() {
+    final WebElement catalogLink = driver.findElement(By.id("catalog-link"));
+    catalogLink.click();
   }
 }

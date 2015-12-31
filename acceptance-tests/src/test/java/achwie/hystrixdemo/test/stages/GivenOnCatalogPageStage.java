@@ -13,13 +13,16 @@ public class GivenOnCatalogPageStage extends Stage<GivenOnCatalogPageStage> {
   @ScenarioState
   private CatalogPage catalogPage;
 
-  public GivenOnCatalogPageStage user_goes_to_login_page() {
+  public GivenOnCatalogPageStage user_follows_login_link() {
     catalogPage.clickLogIn();
 
     return self();
   }
 
   public GivenOnCatalogPageStage user_is_not_logged_in() {
+    if (!catalogPage.isUserOnPage())
+      catalogPage.openPage();
+
     catalogPage.clickLogOutIfAvailable();
 
     return self();
