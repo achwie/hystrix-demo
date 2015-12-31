@@ -24,5 +24,5 @@
       <td><input name="country" /></td>
     </tr>
   </table>
-  <input type="submit" value="Place order" />
+  <input id="place-order-btn" type="submit" value="Place order" />
 </form>

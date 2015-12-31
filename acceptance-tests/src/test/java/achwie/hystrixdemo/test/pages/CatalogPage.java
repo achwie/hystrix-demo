@@ -1,6 +1,7 @@
 package achwie.hystrixdemo.test.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -33,8 +34,13 @@ public class CatalogPage {
   }
 
   public void clickLogIn() {
-    final WebElement loginLink = driver.findElement(By.id("loginLink"));
+    final WebElement loginLink = driver.findElement(By.id("login-link"));
     loginLink.click();
+  }
+
+  public void clickCartLink() {
+    final WebElement cartLink = driver.findElement(By.id("cart-link"));
+    cartLink.click();
   }
 
   public boolean isUserOnPage() {
@@ -46,6 +52,26 @@ public class CatalogPage {
   }
 
   private WebElement getUserStatus() {
-    return driver.findElement(By.id("loginStatus"));
+    return driver.findElement(By.id("login-status"));
+  }
+
+  public void addProductToCart(String productId) {
+    final WebElement catalogItemForm = driver.findElement(By.id("add-item-" + productId));
+
+    catalogItemForm.submit();
+  }
+
+  public void clickMyOrdersLink() {
+    final WebElement myOrdersLink = driver.findElement(By.id("order-history-link"));
+    myOrdersLink.click();
+  }
+
+  public void clickLogOutIfAvailable() {
+    try {
+      final WebElement logoutLink = driver.findElement(By.id("logout-link"));
+      logoutLink.click();
+    } catch (NoSuchElementException e) {
+      // Ignore - seems like we are logged out already
+    }
   }
 }

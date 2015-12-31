@@ -19,7 +19,11 @@ public class LoginPage {
   }
 
   public void openPage() {
-    driver.get(baseUrl + "/login");
+    driver.get(pageUrl());
+  }
+
+  public boolean isUserOnPage() {
+    return driver.getCurrentUrl().equals(pageUrl());
   }
 
   public void loginWithCredentials(String username, String password) {
@@ -30,5 +34,9 @@ public class LoginPage {
     usernameField.sendKeys(username);
     passwordField.sendKeys(password);
     loginForm.submit();
+  }
+
+  private String pageUrl() {
+    return baseUrl + "/login";
   }
 }

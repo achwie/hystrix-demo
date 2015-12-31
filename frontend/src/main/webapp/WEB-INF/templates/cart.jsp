@@ -20,9 +20,9 @@
   </table>
 
   <c:if test="${user.loggedIn}">
-    <a href="order-address">Enter shipping address</a>
+    <a id="shipping-address-link" href="order-address">Enter shipping address</a>
   </c:if>
   <c:if test="${not user.loggedIn}">
-    <a href="login">Login to place order</a>
+    <a id="login-link" href="login">Login to place order</a>
   </c:if>
 </c:if>

@@ -2,12 +2,16 @@ package achwie.hystrixdemo.test.stages;
 
 import com.tngtech.jgiven.Stage;
 import com.tngtech.jgiven.annotation.BeforeScenario;
-import com.tngtech.jgiven.annotation.ProvidedScenarioState;
 import com.tngtech.jgiven.annotation.ScenarioRule;
 import com.tngtech.jgiven.annotation.ScenarioStage;
+import com.tngtech.jgiven.annotation.ScenarioState;
 
+import achwie.hystrixdemo.test.pages.CartPage;
 import achwie.hystrixdemo.test.pages.CatalogPage;
 import achwie.hystrixdemo.test.pages.LoginPage;
+import achwie.hystrixdemo.test.pages.OrderAddressPage;
+import achwie.hystrixdemo.test.pages.OrderHistoryPage;
+import achwie.hystrixdemo.test.pages.OrderPlacedPage;
 
 /**
  * 
@@ -18,15 +22,27 @@ public class GivenStage extends Stage<GivenStage> {
   private final PageFactoryResource pageFactory = new PageFactoryResource();
   @ScenarioStage
   private GivenOnCatalogPageStage givenOnCatalogPageStage;
-  @ProvidedScenarioState
+  @ScenarioState
   private CatalogPage catalogPage;
-  @ProvidedScenarioState
+  @ScenarioState
   private LoginPage loginPage;
+  @ScenarioState
+  private CartPage cartPage;
+  @ScenarioState
+  private OrderAddressPage orderAddressPage;
+  @ScenarioState
+  private OrderPlacedPage orderPlacedPage;
+  @ScenarioState
+  private OrderHistoryPage orderHistoryPage;
 
   @BeforeScenario
   public void setUp() {
     catalogPage = pageFactory.createCatalogPage();
     loginPage = pageFactory.createLoginPage();
+    cartPage = pageFactory.createCartPage();
+    orderAddressPage = pageFactory.createOrderAddressPage();
+    orderPlacedPage = pageFactory.createOrderPlacedPage();
+    orderHistoryPage = pageFactory.createOrderHistoryPage();
   }
 
   public GivenOnCatalogPageStage user_is_on_catalog_page() {
@@ -34,7 +50,14 @@ public class GivenStage extends Stage<GivenStage> {
     return givenOnCatalogPageStage;
   }
 
-  public void user_is_on_login_page() {
+  public GivenStage user_is_on_login_page() {
     loginPage.openPage();
+    return self();
+  }
+
+  public GivenStage user_is_logged_in_as(String username, String password) {
+    loginPage.openPage();
+    loginPage.loginWithCredentials(username, password);
+    return self();
   }
 }
