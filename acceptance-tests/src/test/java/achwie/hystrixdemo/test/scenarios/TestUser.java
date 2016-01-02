@@ -1,5 +1,10 @@
 package achwie.hystrixdemo.test.scenarios;
 
+/**
+ * 
+ * @author 30.12.2015, Achim Wiedemann
+ *
+ */
 public enum TestUser {
   USER_JOHN("john", "doe"), USER_TEST("test", "test");
   public final String username;
