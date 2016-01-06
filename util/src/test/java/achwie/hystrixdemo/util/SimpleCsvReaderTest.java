@@ -11,6 +11,11 @@ import java.util.List;
 
 import org.junit.Test;
 
+/**
+ * 
+ * @author 17.12.2015, Achim Wiedemann
+ *
+ */
 public class SimpleCsvReaderTest {
   @Test
   public void readLine_shouldTrimValuesOfLine() throws IOException {

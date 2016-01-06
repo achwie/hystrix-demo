@@ -1,14 +1,17 @@
+# Frontend webapp
+service.frontend.baseurl = http://localhost:8080/hystrix-demo-frontend
+
 # Stock service
-service.stock.baseurl = http://localhost:8080/hystrix-demo-stock/stock
+service.stock.baseurl = http://localhost:8081/stock
 
 # Catalog service
-service.catalog.baseurl = http://localhost:8080/hystrix-demo-catalog/catalog
+service.catalog.baseurl = http://localhost:8082/catalog
 
 # Cart service
-service.cart.baseurl = http://localhost:8080/hystrix-demo-cart/cart
+service.cart.baseurl = http://localhost:8083/cart
 
 # Authentication service
-service.auth.baseurl = http://localhost:8080/hystrix-demo-auth/auth
+service.auth.baseurl = http://localhost:8084/auth
 
 # Order service
-service.order.baseurl = http://localhost:8080/hystrix-demo-order/orders
+service.order.baseurl = http://localhost:8085/orders

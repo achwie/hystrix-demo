@@ -15,6 +15,16 @@
 
   <dependencies>
     <dependency>
+      <groupId>achwie</groupId>
+      <artifactId>hystrix-demo-service-urls</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>achwie</groupId>
+      <artifactId>hystrix-demo-jetty-starter</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
     </dependency>

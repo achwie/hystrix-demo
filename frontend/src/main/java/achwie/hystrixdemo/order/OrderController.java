@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import achwie.hystrixdemo.auth.SessionService;
-import achwie.hystrixdemo.cart.CartService;
 import achwie.hystrixdemo.cart.Cart;
+import achwie.hystrixdemo.cart.CartService;
 
 /**
  * 
@@ -58,6 +58,7 @@ public class OrderController {
     } else {
       // TODO: Handle failure
       System.out.println("Order could NOT be placed!");
+      return "redirect:order-address";
     }
 
     return "redirect:order-placed";
