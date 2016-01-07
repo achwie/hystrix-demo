@@ -55,7 +55,7 @@ public class CatalogController {
       cart = cartService.getCart(sessionId);
     } catch (IOException e) {
       LOG.error(e.getMessage());
-      cart = Cart.emptyCart();
+      cart = Cart.EMPTY_CART;
     }
 
     List<CatalogItem> catalogItems;

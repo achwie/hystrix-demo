@@ -71,7 +71,7 @@ public class CartService {
       if (e.getStatusCode() != HttpStatus.NOT_FOUND) {
         LOG.error("Unexpected response while getting cart at {} (status: {}, response body: '{}')", url, e.getStatusCode(), e.getResponseBodyAsString());
       }
-      return Cart.emptyCart();
+      return Cart.EMPTY_CART;
     } catch (RestClientException e) {
       throw new IOException("Could not get cart at " + url, e);
     }

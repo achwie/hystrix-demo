@@ -48,7 +48,7 @@ public class CartController {
       cart = cartService.getCart(sessionId);
     } catch (IOException e) {
       LOG.error(e.getMessage());
-      cart = Cart.emptyCart();
+      cart = Cart.EMPTY_CART;
     }
 
     model.addAttribute("cart", cart);

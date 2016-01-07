@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author 11.11.2015, Achim Wiedemann
  */
 public class Cart {
+  public static final Cart EMPTY_CART = new Cart(Collections.emptyList());
   private final List<CartItem> cartItems;
 
   @JsonCreator
@@ -33,9 +34,5 @@ public class Cart {
 
   public boolean isEmpty() {
     return getTotalItemCount() < 1;
-  }
-
-  public static Cart emptyCart() {
-    return new Cart(Collections.emptyList());
   }
 }
