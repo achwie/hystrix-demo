@@ -18,6 +18,13 @@ public class StockService {
     this.stockRepo = stockRepo;
   }
 
+  /**
+   * Returns the stock quantity for a given product.
+   * 
+   * @param productId The product ID.
+   * @return The quantity for the given product or {@code -1} if there was no
+   *         according stock count entry.
+   */
   public int getStockQuantity(String productId) {
     final int[] quantities = stockRepo.getQuantities(Arrays.asList(productId));
 

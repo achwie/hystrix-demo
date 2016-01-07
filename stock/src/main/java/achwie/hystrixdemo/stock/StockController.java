@@ -28,7 +28,8 @@ public class StockController {
   public ResponseEntity<Integer> getQuantity(@PathVariable String productId) {
     final int quantity = stockService.getStockQuantity(productId);
 
-    return new ResponseEntity<Integer>(quantity, HttpStatus.OK);
+    final HttpStatus status = (quantity != -1) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+    return new ResponseEntity<Integer>(quantity, status);
   }
 
   @RequestMapping(value = "/put-hold-on-all", method = RequestMethod.POST)

@@ -34,4 +34,8 @@ public class Cart {
   public boolean isEmpty() {
     return getTotalItemCount() < 1;
   }
+
+  public static Cart emptyCart() {
+    return new Cart(Collections.emptyList());
+  }
 }

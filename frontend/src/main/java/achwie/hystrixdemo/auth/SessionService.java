@@ -2,6 +2,8 @@ package achwie.hystrixdemo.auth;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SessionService {
+  private static final Logger LOG = LoggerFactory.getLogger(SessionService.class);
   private ThreadLocal<HttpServletRequest> servletRequests = new ThreadLocal<>();
   public static final String SESSION_KEY_IDENTITY = "SessionService.IDENTITY";
 
@@ -80,8 +83,7 @@ public class SessionService {
     if (user.isLoggedIn()) {
       req.getSession().setAttribute(SESSION_KEY_IDENTITY, user);
     } else {
-      // TODO: Log
-      System.err.println("Can't set user for non-authenticated user!");
+      LOG.debug("Can't set session user for non-authenticated user!");
     }
   }
 

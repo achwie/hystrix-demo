@@ -1,18 +1,18 @@
 package achwie.hystrixdemo.catalog;
 
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriUtils;
 
 /**
  * 
@@ -20,6 +20,7 @@ import org.springframework.web.util.UriUtils;
  */
 @Component
 public class CatalogService {
+  private static final Logger LOG = LoggerFactory.getLogger(CatalogService.class);
   private final RestTemplate restTemplate = new RestTemplate();
   private final String productServiceBaseUrl;
 
@@ -28,39 +29,44 @@ public class CatalogService {
     this.productServiceBaseUrl = productServiceBaseUrl;
   }
 
-  public List<CatalogItem> findAll() {
+  /**
+   * Returns all items of the catalog.
+   * 
+   * @return All items of the catalog or an empty list if the catalog was empty.
+   * @throws IOException If something went wrong with the remote call.
+   */
+  public List<CatalogItem> findAll() throws IOException {
     final String url = productServiceBaseUrl;
     try {
-      ResponseEntity<CatalogItem[]> productsResponse = restTemplate.getForEntity(url, CatalogItem[].class);
+      final CatalogItem[] products = restTemplate.getForObject(url, CatalogItem[].class);
 
-      if (productsResponse.getStatusCode() == HttpStatus.OK) {
-        return Arrays.asList(productsResponse.getBody());
-      }
+      return Arrays.asList(products);
     } catch (RestClientException e) {
-      // TODO: Log
-      e.printStackTrace();
+      throw new IOException("Could not get catalog items at " + url, e);
     }
-    // TODO: Log
-    System.err.println(String.format("ERROR: Couldn't get catalog-items using URL %s!", url));
-    return Collections.emptyList();
   }
 
-  public CatalogItem findById(String itemId) {
+  /**
+   * Returns the catalog item for the given ID.
+   * 
+   * @param itemId The ID of the item to get.
+   * @return The catalog item for the given ID or {@code null} if there was no
+   *         item with the given ID.
+   * @throws IOException If something went wrong with the remote call.
+   */
+  public CatalogItem findById(String itemId) throws IOException {
+    String url = productServiceBaseUrl + "/" + itemId;
     try {
-      String url = productServiceBaseUrl + "/" + UriUtils.encodePathSegment(itemId, "UTF-8");
-      ResponseEntity<CatalogItem> catalogResponse = restTemplate.getForEntity(url, CatalogItem.class);
-      if (catalogResponse.getStatusCode() == HttpStatus.OK) {
-        return catalogResponse.getBody();
-      } else {
-        // TODO: Log
-        System.err.println(String.format("ERROR: Couldn't get catalog-item using URL %s!", url));
+      return restTemplate.getForObject(url, CatalogItem.class);
+    } catch (HttpStatusCodeException e) {
+      // Returns 404 if item could not be found
+      if (e.getStatusCode() != HttpStatus.NOT_FOUND) {
+        LOG.error("Unexpected response while getting product at {} (status: {}, response body: '{}')", url, e.getStatusCode(), e.getResponseBodyAsString());
       }
-    } catch (UnsupportedEncodingException e) {
-      // TODO: Log
-      System.err.println("ERROR: Could not create URL for fetching catalog-items!");
-      e.printStackTrace();
-    }
 
-    return null;
+      return null;
+    } catch (RestClientException e) {
+      throw new IOException("Could not get catalog item at " + url, e);
+    }
   }
 }

@@ -1,7 +1,11 @@
 package achwie.hystrixdemo.auth;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +22,7 @@ import achwie.hystrixdemo.cart.CartService;
  */
 @Controller
 public class AuthController {
+  private static final Logger LOG = LoggerFactory.getLogger(AuthController.class);
   private final AuthService authService;
   private final SessionService sessionService;
   private final CartService cartService;
@@ -44,12 +49,19 @@ public class AuthController {
     final String password = loginCreds.getPassword();
     final String referrer = loginCreds.getReferrer();
 
-    final User user = authService.login(username, password);
+    User user;
+    try {
+      user = authService.login(username, password);
+    } catch (IOException e) {
+      LOG.error(e.getMessage());
+      user = User.ANONYMOUS;
+    }
 
     if (user.isLoggedIn()) {
       sessionService.setSessionUser(user);
       return StringUtils.hasText(referrer) ? ("redirect:" + referrer) : "redirect:catalog";
     } else {
+      // TODO: User feedback
       return "redirect:login";
     }
   }
@@ -58,9 +70,19 @@ public class AuthController {
   public String performLogout(HttpServletRequest req) {
     final String sessionId = sessionService.getSessionId();
 
-    cartService.clearCart(sessionId);
+    try {
+      cartService.clearCart(sessionId);
+    } catch (IOException e) {
+      LOG.error(e.getMessage());
+    }
+
     sessionService.removeSessionUser();
-    authService.logout();
+
+    try {
+      authService.logout();
+    } catch (IOException e) {
+      LOG.error(e.getMessage());
+    }
 
     return "redirect:catalog";
   }

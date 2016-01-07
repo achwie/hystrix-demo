@@ -1,10 +1,15 @@
 package achwie.hystrixdemo.order;
 
+import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -13,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
  */
 @Component
 public class StockService {
+  private static final Logger LOG = LoggerFactory.getLogger(StockService.class);
   private final RestTemplate restTemplate = new RestTemplate();
   private final String stockServiceBaseUrl;
 
@@ -34,16 +40,28 @@ public class StockService {
    *         requested quantities, {@code false} else.
    * @throws IllegalArgumentException If one of the arrays is {@code null} or
    *           they differ in length.
+   * @throws IOException If something went wrong with the remote call.
    */
-  public boolean putHoldOnAll(String[] productIds, int[] quantities) {
+  public boolean putHoldOnAll(String[] productIds, int[] quantities) throws IOException {
     final PutProductsOnHoldRequest request = new PutProductsOnHoldRequest();
     request.setProductIds(productIds);
     request.setQuantities(quantities);
 
     final String url = stockServiceBaseUrl + "/put-hold-on-all";
-    final ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+    try {
+      restTemplate.postForObject(url, request, String.class);
+      return true;
+    } catch (HttpStatusCodeException e) {
+      // Returns 409 if there's insufficient stock for one of the ordered items
+      if (e.getStatusCode() != HttpStatus.CONFLICT) {
+        LOG.error("Unexpected response while putting a hold on products for order at {} (status: {}, response body: '{}')", url, e.getStatusCode(),
+            e.getResponseBodyAsString());
+      }
+    } catch (RestClientException e) {
+      throw new IOException("Could not put hold on products!", e);
+    }
 
-    return response.getStatusCode() == HttpStatus.OK;
+    return false;
   }
 
   // ---------------------------------------------------------------------------

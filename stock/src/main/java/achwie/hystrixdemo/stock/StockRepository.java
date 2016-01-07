@@ -62,7 +62,7 @@ public class StockRepository {
   private int getQuantityForProduct(String productId) {
     synchronized (lock) {
       final Integer quantityForProduct = quantitiesByProduct.get(productId);
-      return (quantityForProduct != null) ? quantityForProduct : 0;
+      return (quantityForProduct != null) ? quantityForProduct : -1;
     }
   }
 }

@@ -1,5 +1,6 @@
 package achwie.hystrixdemo.order;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,15 @@ public class OrderService {
     this.stockService = stockService;
   }
 
-  public boolean placeOrder(Order order) {
+  /**
+   * Places an order.
+   * 
+   * @param order The order to place
+   * @return Whether the placement of the order was successful or not (e.g.
+   *         because an item was not on stock)
+   * @throws IOException If something went wrong with the remote call.
+   */
+  public boolean placeOrder(Order order) throws IOException {
     final List<OrderItem> orderItems = order.getOrderItems();
     final String[] productIds = new String[orderItems.size()];
     final int[] quantities = new int[orderItems.size()];
