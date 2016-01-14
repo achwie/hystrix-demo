@@ -22,17 +22,29 @@ public class CartItem {
     this.quantity = quantity;
   }
 
+  public String getProductId() {
+    return productId;
+  }
+
+  public String getProductName() {
+    return productName;
+  }
+
+  public int getQuantity() {
+    return quantity;
+  }
+
   public String toJson() {
     JSONObject json = new JSONObject();
 
-    json.put(FIELD_PRODUCT_ID, productId);
-    json.put(FIELD_PRODUCT_NAME, productName);
-    json.put(FIELD_QUANTITY, quantity);
+    json.put(FIELD_PRODUCT_ID, getProductId());
+    json.put(FIELD_PRODUCT_NAME, getProductName());
+    json.put(FIELD_QUANTITY, getQuantity());
 
     return json.toString();
   }
 
   public String toString() {
-    return "CartItem[productId: " + productId + ", productName: " + productName + ", quantity: " + quantity + "]";
+    return "CartItem[productId: " + getProductId() + ", productName: " + getProductName() + ", quantity: " + getQuantity() + "]";
   }
 }

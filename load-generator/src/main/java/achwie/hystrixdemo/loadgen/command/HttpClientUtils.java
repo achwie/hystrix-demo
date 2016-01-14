@@ -14,15 +14,18 @@ import org.apache.http.HttpEntity;
  *
  */
 public class HttpClientUtils {
+  public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
 
   /**
    * Returns the charset of the request/response.
    * 
    * @param httpEntity The request/response to get the charset for.
-   * @return The charset of the request/response or {@code null} if the charset
-   *         could not be detected.
+   * @param defaultCharset The charset to return if the charset could not be
+   *          detected from the request/response.
+   * @return The charset of the request/response or the {@code defaultCharset}
+   *         if the charset could not be detected from the request/response.
    */
-  public static Charset getCharset(HttpEntity httpEntity) {
+  public static Charset getCharset(HttpEntity httpEntity, Charset defaultCharset) {
     final Header contentTypeHeader = httpEntity.getContentType();
     if (contentTypeHeader != null) {
       final String contentType = contentTypeHeader.getValue();
@@ -34,7 +37,7 @@ public class HttpClientUtils {
       }
     }
 
-    return null;
+    return defaultCharset;
   }
 
   /**

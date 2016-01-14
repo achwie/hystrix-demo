@@ -14,7 +14,7 @@ public class Catalog {
     this.catalogJson = catalogJson;
   }
 
-  public int getItemCount() {
+  public int size() {
     return catalogJson.length();
   }
 
@@ -22,8 +22,8 @@ public class Catalog {
     if (i < 0)
       throw new IndexOutOfBoundsException(String.format("Invalid index: %d (must be >= 0)", i));
 
-    if (i >= getItemCount())
-      throw new IndexOutOfBoundsException(String.format("Invalid index: %d (list length: %d)", i, getItemCount()));
+    if (i >= size())
+      throw new IndexOutOfBoundsException(String.format("Invalid index: %d (list length: %d)", i, size()));
 
     return new CatalogItem(catalogJson, i);
   }

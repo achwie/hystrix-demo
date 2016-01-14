@@ -41,11 +41,12 @@ public class AddToCartCommand implements Callable<Void> {
   }
 
   public static void main(String[] args) throws Exception {
+    final String sessionId = "1";
     final ServicesConfig servicesConfig = new ServicesConfig(ServicesConfig.FILENAME_SERVICES_PROPERTIES);
     final String cartServiceBaseUrl = servicesConfig.getProperty(ServicesConfig.PROP_CART_BASEURL);
 
     final CartItem itemToAdd = new CartItem("A123", "Something awesome", 1);
 
-    new AddToCartCommand(cartServiceBaseUrl, "1", itemToAdd).call();
+    new AddToCartCommand(cartServiceBaseUrl, sessionId, itemToAdd).call();
   }
 }

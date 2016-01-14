@@ -31,10 +31,7 @@ public class GetCatalogCommand implements Callable<Catalog> {
       final HttpEntity responseEntity = resp.getEntity();
 
       final byte[] content = HttpClientUtils.getContent(responseEntity);
-
-      Charset charset = HttpClientUtils.getCharset(responseEntity);
-      if (charset == null)
-        charset = Charset.forName("UTF-8");
+      final Charset charset = HttpClientUtils.getCharset(responseEntity, HttpClientUtils.DEFAULT_CHARSET);
 
       final String catalogJsonStr = new String(content, charset);
 
@@ -48,7 +45,7 @@ public class GetCatalogCommand implements Callable<Catalog> {
     final Catalog catalog = new GetCatalogCommand(catalogServiceBaseUrl).call();
 
     System.out.println("Catalog items:");
-    for (int i = 0; i < catalog.getItemCount(); i++)
+    for (int i = 0; i < catalog.size(); i++)
       System.out.println("  " + catalog.getItem(i));
   }
 }
