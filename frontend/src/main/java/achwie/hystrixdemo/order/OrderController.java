@@ -1,7 +1,5 @@
 package achwie.hystrixdemo.order;
 
-import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,43 +37,32 @@ public class OrderController {
 
   @RequestMapping(value = "order-address", method = RequestMethod.GET)
   public String enterShippingAddress() {
-    SessionService.ensureAuthenticatedUser(sessionService, "enter shipping address");
+    sessionService.ensureAuthenticatedUser("enter shipping address");
 
     return "order-address";
   }
 
   @RequestMapping(value = "place-order", method = RequestMethod.POST)
   public String placeOrder(Model model, HttpServletRequest req) {
-    SessionService.ensureAuthenticatedUser(sessionService, "place order");
+    sessionService.ensureAuthenticatedUser("place order");
 
     final String sessionId = sessionService.getSessionId();
-    Cart cart;
-    try {
-      cart = cartService.getCart(sessionId);
-    } catch (IOException e) {
-      LOG.error(e.getMessage());
-      cart = Cart.EMPTY_CART;
-    }
+    final Cart cart = cartService.getCart(sessionId);
 
     if (cart.isEmpty()) {
       LOG.warn("Can't place an order with an empty cart!");
       return "redirect:order-address";
     }
 
-    boolean success;
-    try {
-      success = orderService.placeOrder(sessionId, cart);
+    final boolean success = orderService.placeOrder(sessionId, cart);
 
-      if (success) {
-        cartService.clearCart(sessionId);
-        return "redirect:order-placed";
-      } else {
-        final User user = sessionService.getSessionUser();
-        LOG.warn("Order with session {} for user {} could not be placed (this might be because of insufficient availability of some products)!", sessionId,
-            user.getUserName());
-      }
-    } catch (IOException e) {
-      LOG.error(e.getMessage());
+    if (success) {
+      cartService.clearCart(sessionId);
+      return "redirect:order-placed";
+    } else {
+      final User user = sessionService.getSessionUser();
+      LOG.warn("Order with session {} for user {} could not be placed (this might be because of insufficient availability of some products)!", sessionId,
+          user.getUserName());
     }
 
     // TODO: User feedback
@@ -89,15 +76,9 @@ public class OrderController {
 
   @RequestMapping(value = "my-orders", method = RequestMethod.GET)
   public String viewOrders(Model model, HttpServletRequest req) {
-    SessionService.ensureAuthenticatedUser(sessionService, "view my orders");
+    sessionService.ensureAuthenticatedUser("view my orders");
     final String sessionId = sessionService.getSessionId();
-    List<Order> ordersForUser;
-    try {
-      ordersForUser = orderService.getOrdersForUser(sessionId);
-    } catch (IOException e) {
-      LOG.error(e.getMessage());
-      ordersForUser = Collections.emptyList();
-    }
+    final List<Order> ordersForUser = orderService.getOrdersForUser(sessionId);
 
     model.addAttribute("orders", ordersForUser);
 

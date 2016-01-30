@@ -1,14 +1,10 @@
 package achwie.hystrixdemo.catalog;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,7 +23,6 @@ import achwie.hystrixdemo.stock.StockService;
  */
 @Controller
 public class CatalogController {
-  private static final Logger LOG = LoggerFactory.getLogger(CatalogController.class);
   private final CatalogService catalogService;
   private final CartService cartService;
   private final StockService stockService;
@@ -50,21 +45,9 @@ public class CatalogController {
   public String viewCatalog(Model model, HttpServletRequest req) {
     final User user = sessionService.getSessionUser();
     final String sessionId = sessionService.getSessionId();
-    Cart cart;
-    try {
-      cart = cartService.getCart(sessionId);
-    } catch (IOException e) {
-      LOG.error(e.getMessage());
-      cart = Cart.EMPTY_CART;
-    }
+    final Cart cart = cartService.getCart(sessionId);
 
-    List<CatalogItem> catalogItems;
-    try {
-      catalogItems = catalogService.findAll();
-    } catch (IOException e) {
-      LOG.error(e.getMessage());
-      catalogItems = Collections.emptyList();
-    }
+    final List<CatalogItem> catalogItems = catalogService.findAll();
 
     model.addAttribute("catalogItems", toCatalogItems(catalogItems));
     model.addAttribute("cart", cart);
@@ -77,13 +60,7 @@ public class CatalogController {
     final List<Product> products = new ArrayList<>();
     // TODO: Fetch stock quantities in bulk for better performance
     for (CatalogItem item : catalogItems) {
-      int productStockQuantity;
-      try {
-        productStockQuantity = stockService.getStockQuantity(item.getId());
-      } catch (IOException e) {
-        LOG.error(e.getMessage());
-        productStockQuantity = -1;
-      }
+      final int productStockQuantity = stockService.getStockQuantity(item.getId());
 
       final Product product = new Product();
       product.setId(item.getId());

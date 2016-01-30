@@ -1,7 +1,5 @@
 package achwie.hystrixdemo.cart;
 
-import java.io.IOException;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -43,13 +41,7 @@ public class CartController {
   public String viewCart(Model model, HttpServletRequest req) {
     final User user = sessionService.getSessionUser();
     final String sessionId = sessionService.getSessionId();
-    Cart cart;
-    try {
-      cart = cartService.getCart(sessionId);
-    } catch (IOException e) {
-      LOG.error(e.getMessage());
-      cart = Cart.EMPTY_CART;
-    }
+    final Cart cart = cartService.getCart(sessionId);
 
     model.addAttribute("cart", cart);
     model.addAttribute("user", user);
@@ -60,27 +52,12 @@ public class CartController {
   @RequestMapping(value = "add-to-cart", method = RequestMethod.POST)
   public String addToCart(@ModelAttribute CartItem cartItem, HttpServletRequest req) {
     final String sessionId = sessionService.getSessionId();
-    CatalogItem catalogItem = null;
-    try {
-      catalogItem = catalogService.findById(cartItem.getProductId());
-    } catch (IOException e) {
-      LOG.error(e.getMessage());
-    }
+    final CatalogItem catalogItem = catalogService.findById(cartItem.getProductId());
 
-    int itemQuantity = -1;
-    try {
-      itemQuantity = stockService.getStockQuantity(cartItem.getProductId());
-    } catch (IOException e) {
-      LOG.error(e.getMessage());
-    }
+    final int itemQuantity = stockService.getStockQuantity(cartItem.getProductId());
 
     if (catalogItem != null && itemQuantity > 0) {
-      try {
-        cartService.addToCart(sessionId, catalogItem, cartItem.getQuantity());
-      } catch (IOException e) {
-        // TODO: User feedback
-        LOG.error(e.getMessage());
-      }
+      cartService.addToCart(sessionId, catalogItem, cartItem.getQuantity());
     } else {
       // TODO: User feedback
       LOG.error("Couldn't add unknown product to cart (product ID: {})!", cartItem.getProductId());

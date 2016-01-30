@@ -5,7 +5,7 @@ http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
   id="WebApp_ID" version="3.0">
   <display-name>hystrix-demo-frontend</display-name>
 
-  
+  <!-- Using Spring's DelegatingFilterProxy so we have a managed bean -->
   <filter>
     <filter-name>security-filter-proxy</filter-name>
     <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -16,6 +16,14 @@ http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
   </filter>
   <filter-mapping>
     <filter-name>security-filter-proxy</filter-name>
+    <servlet-name>spring-dispatcher</servlet-name>
+  </filter-mapping>
+  <filter>
+    <filter-name>hystrix-context-initializer</filter-name>
+    <filter-class>achwie.hystrixdemo.HystrixContextInitializerFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>hystrix-context-initializer</filter-name>
     <servlet-name>spring-dispatcher</servlet-name>
   </filter-mapping>
   

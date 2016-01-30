@@ -60,8 +60,8 @@ public class SessionService {
    * 
    * @return
    */
-  public static User ensureAuthenticatedUser(SessionService idService, String operationName) {
-    final User user = idService.getSessionUser();
+  public User ensureAuthenticatedUser(String operationName) {
+    final User user = getSessionUser();
 
     if (user.isLoggedIn())
       return user;
