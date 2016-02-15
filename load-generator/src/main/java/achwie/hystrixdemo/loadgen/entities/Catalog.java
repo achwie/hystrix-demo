@@ -1,6 +1,8 @@
 package achwie.hystrixdemo.loadgen.entities;
 
-import org.json.JSONArray;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 
@@ -8,27 +10,21 @@ import org.json.JSONArray;
  *
  */
 public class Catalog {
-  private final JSONArray catalogJson;
-
-  private Catalog(JSONArray catalogJson) {
-    this.catalogJson = catalogJson;
-  }
+  private final List<CatalogItem> items = new ArrayList<>();
 
   public int size() {
-    return catalogJson.length();
+    return items.size();
+  }
+
+  public void add(CatalogItem item) {
+    items.add(item);
+  }
+
+  public List<CatalogItem> getItems() {
+    return Collections.unmodifiableList(items);
   }
 
   public CatalogItem getItem(int i) {
-    if (i < 0)
-      throw new IndexOutOfBoundsException(String.format("Invalid index: %d (must be >= 0)", i));
-
-    if (i >= size())
-      throw new IndexOutOfBoundsException(String.format("Invalid index: %d (list length: %d)", i, size()));
-
-    return new CatalogItem(catalogJson, i);
-  }
-
-  public static Catalog fromJson(String json) {
-    return new Catalog(new JSONArray(json));
+    return items.get(i);
   }
 }

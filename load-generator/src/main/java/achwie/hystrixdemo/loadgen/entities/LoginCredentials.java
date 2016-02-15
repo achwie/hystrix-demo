@@ -18,16 +18,24 @@ public class LoginCredentials {
     this.password = password;
   }
 
+  public String getUsername() {
+    return username;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
   public String toJsonString() {
     JSONObject json = new JSONObject();
 
-    json.put(FIELD_USERNAME, username);
-    json.put(FIELD_PASSWORD, password);
+    json.put(FIELD_USERNAME, getUsername());
+    json.put(FIELD_PASSWORD, getPassword());
 
     return json.toString();
   }
 
   public String toString() {
-    return "LoginCredentials[username: " + username + ", password: " + password + "]";
+    return "LoginCredentials[username: " + getUsername() + ", password: " + getPassword() + "]";
   }
 }
