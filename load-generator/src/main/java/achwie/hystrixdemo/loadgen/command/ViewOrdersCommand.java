@@ -18,39 +18,41 @@ import achwie.hystrixdemo.util.ServicesConfig;
  *
  */
 public class ViewOrdersCommand implements Callable<OrderList> {
+  private final CloseableHttpClient httpClient;
   private final String viewOrdersUrl;
 
-  public ViewOrdersCommand(String orderServiceBaseUrl, String sessionId) {
+  public ViewOrdersCommand(CloseableHttpClient httpClient, String orderServiceBaseUrl, String sessionId) {
+    this.httpClient = httpClient;
     this.viewOrdersUrl = orderServiceBaseUrl + "/" + sessionId;
   }
 
   @Override
   public OrderList call() throws Exception {
-    try (final CloseableHttpClient httpClient = HttpClientFactory.createHttpClient()) {
-      final HttpGet httpGet = new HttpGet(viewOrdersUrl);
+    final HttpGet httpGet = new HttpGet(viewOrdersUrl);
 
-      final CloseableHttpResponse resp = httpClient.execute(httpGet);
-      final HttpEntity responseEntity = resp.getEntity();
+    final CloseableHttpResponse resp = httpClient.execute(httpGet);
+    final HttpEntity responseEntity = resp.getEntity();
 
-      final byte[] content = HttpClientUtils.getContent(responseEntity);
-      final Charset charset = HttpClientUtils.getCharset(responseEntity, HttpClientUtils.DEFAULT_CHARSET);
+    final byte[] content = HttpClientUtils.getContent(responseEntity);
+    final Charset charset = HttpClientUtils.getCharset(responseEntity, HttpClientUtils.DEFAULT_CHARSET);
 
-      final String ordersJsonStr = new String(content, charset);
+    final String ordersJsonStr = new String(content, charset);
 
-      return OrderList.fromJson(ordersJsonStr);
-    }
+    return OrderList.fromJson(ordersJsonStr);
   }
 
   public static void main(String[] args) throws Exception {
-    final String sessionId = "1";
-    final ServicesConfig servicesConfig = new ServicesConfig(ServicesConfig.FILENAME_SERVICES_PROPERTIES);
-    final String orderServiceBaseUrl = servicesConfig.getProperty(ServicesConfig.PROP_ORDER_BASEURL);
-    final OrderList orders = new ViewOrdersCommand(orderServiceBaseUrl, sessionId).call();
+    try (final CloseableHttpClient httpClient = HttpClientFactory.createHttpClient()) {
+      final String sessionId = "1";
+      final ServicesConfig servicesConfig = new ServicesConfig(ServicesConfig.FILENAME_SERVICES_PROPERTIES);
+      final String orderServiceBaseUrl = servicesConfig.getProperty(ServicesConfig.PROP_ORDER_BASEURL);
+      final OrderList orders = new ViewOrdersCommand(httpClient, orderServiceBaseUrl, sessionId).call();
 
-    System.out.println("Orders in session " + sessionId + ":");
-    for (int i = 0; i < orders.size(); i++) {
-      final Order order = orders.getOrder(i);
-      System.out.println(String.format("  * userId: %s, items ordered: %d", order.getUserId(), order.getOrderItemCount()));
+      System.out.println("Orders in session " + sessionId + ":");
+      for (int i = 0; i < orders.size(); i++) {
+        final Order order = orders.getOrder(i);
+        System.out.println(String.format("  * userId: %s, items ordered: %d", order.getUserId(), order.getOrderItemCount()));
+      }
     }
   }
 

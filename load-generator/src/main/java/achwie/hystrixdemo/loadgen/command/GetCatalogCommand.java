@@ -17,35 +17,37 @@ import achwie.hystrixdemo.util.ServicesConfig;
  *
  */
 public class GetCatalogCommand implements Callable<Catalog> {
+  private final CloseableHttpClient httpClient;
   private final String getCatalogUrl;
 
-  public GetCatalogCommand(String catalogServiceBaseUrl) {
+  public GetCatalogCommand(CloseableHttpClient httpClient, String catalogServiceBaseUrl) {
+    this.httpClient = httpClient;
     this.getCatalogUrl = catalogServiceBaseUrl;
   }
 
   public Catalog call() throws Exception {
-    try (final CloseableHttpClient httpClient = HttpClientFactory.createHttpClient()) {
-      final HttpGet httpGet = new HttpGet(getCatalogUrl);
+    final HttpGet httpGet = new HttpGet(getCatalogUrl);
 
-      final CloseableHttpResponse resp = httpClient.execute(httpGet);
-      final HttpEntity responseEntity = resp.getEntity();
+    final CloseableHttpResponse resp = httpClient.execute(httpGet);
+    final HttpEntity responseEntity = resp.getEntity();
 
-      final byte[] content = HttpClientUtils.getContent(responseEntity);
-      final Charset charset = HttpClientUtils.getCharset(responseEntity, HttpClientUtils.DEFAULT_CHARSET);
+    final byte[] content = HttpClientUtils.getContent(responseEntity);
+    final Charset charset = HttpClientUtils.getCharset(responseEntity, HttpClientUtils.DEFAULT_CHARSET);
 
-      final String catalogJsonStr = new String(content, charset);
+    final String catalogJsonStr = new String(content, charset);
 
-      return Catalog.fromJson(catalogJsonStr);
-    }
+    return Catalog.fromJson(catalogJsonStr);
   }
 
   public static void main(String[] args) throws Exception {
-    final ServicesConfig servicesConfig = new ServicesConfig(ServicesConfig.FILENAME_SERVICES_PROPERTIES);
-    final String catalogServiceBaseUrl = servicesConfig.getProperty(ServicesConfig.PROP_CATALOG_BASEURL);
-    final Catalog catalog = new GetCatalogCommand(catalogServiceBaseUrl).call();
+    try (final CloseableHttpClient httpClient = HttpClientFactory.createHttpClient()) {
+      final ServicesConfig servicesConfig = new ServicesConfig(ServicesConfig.FILENAME_SERVICES_PROPERTIES);
+      final String catalogServiceBaseUrl = servicesConfig.getProperty(ServicesConfig.PROP_CATALOG_BASEURL);
+      final Catalog catalog = new GetCatalogCommand(httpClient, catalogServiceBaseUrl).call();
 
-    System.out.println("Catalog items:");
-    for (int i = 0; i < catalog.size(); i++)
-      System.out.println("  " + catalog.getItem(i));
+      System.out.println("Catalog items:");
+      for (int i = 0; i < catalog.size(); i++)
+        System.out.println(" " + catalog.getItem(i));
+    }
   }
 }

@@ -10,8 +10,6 @@ import org.apache.http.impl.client.HttpClients;
  */
 public class HttpClientFactory {
   public static final CloseableHttpClient createHttpClient() {
-    final CloseableHttpClient httpClient = HttpClients.createDefault();
-
-    return httpClient;
+    return HttpClients.createDefault();
   }
 }
