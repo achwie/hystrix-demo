@@ -1,12 +1,15 @@
 package achwie.hystrixdemo.loadgen.command;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import achwie.hystrixdemo.loadgen.entities.CartItem;
@@ -20,21 +23,24 @@ import achwie.hystrixdemo.util.ServicesConfig;
 public class AddToCartCommand implements Callable<Void> {
   private final CloseableHttpClient httpClient;
   private final String addToCartUrl;
-  private final CartItem itemToAdd;
+  private final String productId;
+  private final int quantity;
 
-  public AddToCartCommand(CloseableHttpClient httpClient, String cartServiceBaseUrl, String cartId, CartItem itemToAdd) {
+  public AddToCartCommand(CloseableHttpClient httpClient, String frontendBaseUrl, String productId, int quantity) {
     this.httpClient = httpClient;
-    this.addToCartUrl = cartServiceBaseUrl + "/" + cartId;
-    this.itemToAdd = itemToAdd;
+    this.addToCartUrl = frontendBaseUrl + "/add-to-cart";
+    this.productId = productId;
+    this.quantity = quantity;
   }
 
   @Override
   public Void call() throws Exception {
-    final StringEntity entity = new StringEntity(itemToAdd.toJson());
-    entity.setContentType(ContentType.APPLICATION_JSON.getMimeType());
+    final List<NameValuePair> params = new ArrayList<>();
+    params.add(new BasicNameValuePair("productId", productId));
+    params.add(new BasicNameValuePair("quantity", String.valueOf(quantity)));
 
     final HttpPost httpPost = new HttpPost(addToCartUrl);
-    httpPost.setEntity(entity);
+    httpPost.setEntity(new UrlEncodedFormEntity(params));
 
     final CloseableHttpResponse response = httpClient.execute(httpPost);
     // Even if we don't care for the content: make sure resources are released!
@@ -52,13 +58,12 @@ public class AddToCartCommand implements Callable<Void> {
 
   public static void main(String[] args) throws Exception {
     try (CloseableHttpClient httpClient = HttpClientFactory.createHttpClient()) {
-      final String sessionId = "1";
       final ServicesConfig servicesConfig = new ServicesConfig(ServicesConfig.FILENAME_SERVICES_PROPERTIES);
-      final String cartServiceBaseUrl = servicesConfig.getProperty(ServicesConfig.PROP_CART_BASEURL);
+      final String frontendBaseUrl = servicesConfig.getProperty(ServicesConfig.PROP_FRONTEND_BASEURL);
 
       final CartItem itemToAdd = new CartItem("A123", "Something awesome", 1);
 
-      new AddToCartCommand(httpClient, cartServiceBaseUrl, sessionId, itemToAdd).call();
+      new AddToCartCommand(httpClient, frontendBaseUrl, itemToAdd.getProductId(), 1).call();
     }
   }
 }

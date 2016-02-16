@@ -8,8 +8,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 
-import achwie.hystrixdemo.loadgen.entities.Order;
-import achwie.hystrixdemo.loadgen.entities.OrderList;
+import achwie.hystrixdemo.loadgen.entities.LoginCredentials;
 import achwie.hystrixdemo.util.ServicesConfig;
 
 /**
@@ -17,17 +16,17 @@ import achwie.hystrixdemo.util.ServicesConfig;
  * @author 12.01.2016, Achim Wiedemann
  *
  */
-public class ViewOrdersCommand implements Callable<OrderList> {
+public class ViewOrdersCommand implements Callable<String> {
   private final CloseableHttpClient httpClient;
   private final String viewOrdersUrl;
 
-  public ViewOrdersCommand(CloseableHttpClient httpClient, String orderServiceBaseUrl, String sessionId) {
+  public ViewOrdersCommand(CloseableHttpClient httpClient, String frontendBaseUrl) {
     this.httpClient = httpClient;
-    this.viewOrdersUrl = orderServiceBaseUrl + "/" + sessionId;
+    this.viewOrdersUrl = frontendBaseUrl + "/my-orders";
   }
 
   @Override
-  public OrderList call() throws Exception {
+  public String call() throws Exception {
     final HttpGet httpGet = new HttpGet(viewOrdersUrl);
 
     final CloseableHttpResponse resp = httpClient.execute(httpGet);
@@ -36,24 +35,16 @@ public class ViewOrdersCommand implements Callable<OrderList> {
     final byte[] content = HttpClientUtils.getContent(responseEntity);
     final Charset charset = HttpClientUtils.getCharset(responseEntity, HttpClientUtils.DEFAULT_CHARSET);
 
-    final String ordersJsonStr = new String(content, charset);
-
-    return OrderList.fromJson(ordersJsonStr);
+    // TODO: Parse result into objects
+    return new String(content, charset);
   }
 
   public static void main(String[] args) throws Exception {
     try (final CloseableHttpClient httpClient = HttpClientFactory.createHttpClient()) {
-      final String sessionId = "1";
       final ServicesConfig servicesConfig = new ServicesConfig(ServicesConfig.FILENAME_SERVICES_PROPERTIES);
-      final String orderServiceBaseUrl = servicesConfig.getProperty(ServicesConfig.PROP_ORDER_BASEURL);
-      final OrderList orders = new ViewOrdersCommand(httpClient, orderServiceBaseUrl, sessionId).call();
-
-      System.out.println("Orders in session " + sessionId + ":");
-      for (int i = 0; i < orders.size(); i++) {
-        final Order order = orders.getOrder(i);
-        System.out.println(String.format("  * userId: %s, items ordered: %d", order.getUserId(), order.getOrderItemCount()));
-      }
+      final String frontendBaseUrl = servicesConfig.getProperty(ServicesConfig.PROP_FRONTEND_BASEURL);
+      new LoginCommand(httpClient, frontendBaseUrl, new LoginCredentials("test", "test")).call();
+      new ViewOrdersCommand(httpClient, frontendBaseUrl).call();
     }
   }
-
 }
