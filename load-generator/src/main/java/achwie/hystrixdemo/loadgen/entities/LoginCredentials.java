@@ -1,15 +1,12 @@
 package achwie.hystrixdemo.loadgen.entities;
 
-import org.json.JSONObject;
-
 /**
  * 
  * @author 13.01.2016, Achim Wiedemann
  *
  */
 public class LoginCredentials {
-  public static final String FIELD_USERNAME = "username";
-  public static final String FIELD_PASSWORD = "password";
+  public static LoginCredentials USER_TEST = new LoginCredentials("test", "test");
   private final String username;
   private final String password;
 
@@ -24,15 +21,6 @@ public class LoginCredentials {
 
   public String getPassword() {
     return password;
-  }
-
-  public String toJsonString() {
-    JSONObject json = new JSONObject();
-
-    json.put(FIELD_USERNAME, getUsername());
-    json.put(FIELD_PASSWORD, getPassword());
-
-    return json.toString();
   }
 
   public String toString() {

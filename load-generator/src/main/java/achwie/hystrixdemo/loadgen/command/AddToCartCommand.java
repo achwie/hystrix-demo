@@ -2,11 +2,11 @@ package achwie.hystrixdemo.loadgen.command;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -20,21 +20,19 @@ import achwie.hystrixdemo.util.ServicesConfig;
  * @author 12.01.2016, Achim Wiedemann
  *
  */
-public class AddToCartCommand implements Callable<Void> {
-  private final CloseableHttpClient httpClient;
+public class AddToCartCommand implements HttpClientCommand<Void> {
   private final String addToCartUrl;
   private final String productId;
   private final int quantity;
 
-  public AddToCartCommand(CloseableHttpClient httpClient, String frontendBaseUrl, String productId, int quantity) {
-    this.httpClient = httpClient;
+  public AddToCartCommand(String frontendBaseUrl, String productId, int quantity) {
     this.addToCartUrl = frontendBaseUrl + "/add-to-cart";
     this.productId = productId;
     this.quantity = quantity;
   }
 
   @Override
-  public Void call() throws Exception {
+  public Void run(HttpClient httpClient) throws Exception {
     final List<NameValuePair> params = new ArrayList<>();
     params.add(new BasicNameValuePair("productId", productId));
     params.add(new BasicNameValuePair("quantity", String.valueOf(quantity)));
@@ -42,7 +40,7 @@ public class AddToCartCommand implements Callable<Void> {
     final HttpPost httpPost = new HttpPost(addToCartUrl);
     httpPost.setEntity(new UrlEncodedFormEntity(params));
 
-    final CloseableHttpResponse response = httpClient.execute(httpPost);
+    final HttpResponse response = httpClient.execute(httpPost);
     // Even if we don't care for the content: make sure resources are released!
     // We consume the HTTP entity in contrast to simply closing the response,
     // because this way HttpClient will try to re-use the connection, whereas
@@ -63,7 +61,7 @@ public class AddToCartCommand implements Callable<Void> {
 
       final CartItem itemToAdd = new CartItem("A123", "Something awesome", 1);
 
-      new AddToCartCommand(httpClient, frontendBaseUrl, itemToAdd.getProductId(), 1).call();
+      new AddToCartCommand(frontendBaseUrl, itemToAdd.getProductId(), 1).run(httpClient);
     }
   }
 }

@@ -1,12 +1,12 @@
 package achwie.hystrixdemo.loadgen.command;
 
 import java.nio.charset.Charset;
-import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 
@@ -19,19 +19,17 @@ import achwie.hystrixdemo.util.ServicesConfig;
  * @author 12.01.2016, Achim Wiedemann
  *
  */
-public class GetCatalogCommand implements Callable<Catalog> {
-  private final CloseableHttpClient httpClient;
+public class GetCatalogCommand implements HttpClientCommand<Catalog> {
   private final String getCatalogUrl;
 
-  public GetCatalogCommand(CloseableHttpClient httpClient, String frontendBaseUrl) {
-    this.httpClient = httpClient;
+  public GetCatalogCommand(String frontendBaseUrl) {
     this.getCatalogUrl = frontendBaseUrl + "/catalog";
   }
 
-  public Catalog call() throws Exception {
+  public Catalog run(HttpClient httpClient) throws Exception {
     final HttpGet httpGet = new HttpGet(getCatalogUrl);
 
-    final CloseableHttpResponse resp = httpClient.execute(httpGet);
+    final HttpResponse resp = httpClient.execute(httpGet);
     final HttpEntity responseEntity = resp.getEntity();
 
     final byte[] content = HttpClientUtils.getContent(responseEntity);
@@ -73,7 +71,7 @@ public class GetCatalogCommand implements Callable<Catalog> {
     try (final CloseableHttpClient httpClient = HttpClientFactory.createHttpClient()) {
       final ServicesConfig servicesConfig = new ServicesConfig(ServicesConfig.FILENAME_SERVICES_PROPERTIES);
       final String catalogServiceBaseUrl = servicesConfig.getProperty(ServicesConfig.PROP_FRONTEND_BASEURL);
-      final Catalog catalog = new GetCatalogCommand(httpClient, catalogServiceBaseUrl).call();
+      final Catalog catalog = new GetCatalogCommand(catalogServiceBaseUrl).run(httpClient);
 
       System.out.println("Catalog items:");
       for (int i = 0; i < catalog.size(); i++)

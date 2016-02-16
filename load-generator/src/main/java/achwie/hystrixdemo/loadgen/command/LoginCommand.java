@@ -2,13 +2,13 @@ package achwie.hystrixdemo.loadgen.command;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import org.apache.http.Header;
+import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -22,19 +22,17 @@ import achwie.hystrixdemo.util.ServicesConfig;
  * @author 12.01.2016, Achim Wiedemann
  *
  */
-public class LoginCommand implements Callable<Boolean> {
-  private final CloseableHttpClient httpClient;
+public class LoginCommand implements HttpClientCommand<Boolean> {
   private final String loginUrl;
   private final LoginCredentials loginCreds;
 
-  public LoginCommand(CloseableHttpClient httpClient, String frontendBaseUrl, LoginCredentials loginCreds) {
-    this.httpClient = httpClient;
+  public LoginCommand(String frontendBaseUrl, LoginCredentials loginCreds) {
     this.loginUrl = frontendBaseUrl + "/login";
     this.loginCreds = loginCreds;
   }
 
   @Override
-  public Boolean call() throws Exception {
+  public Boolean run(HttpClient httpClient) throws Exception {
     final List<NameValuePair> params = new ArrayList<>();
     params.add(new BasicNameValuePair("username", loginCreds.getUsername()));
     params.add(new BasicNameValuePair("password", loginCreds.getPassword()));
@@ -42,7 +40,7 @@ public class LoginCommand implements Callable<Boolean> {
     final HttpPost httpPost = new HttpPost(loginUrl);
     httpPost.setEntity(new UrlEncodedFormEntity(params));
 
-    final CloseableHttpResponse response = httpClient.execute(httpPost);
+    final HttpResponse response = httpClient.execute(httpPost);
 
     // Even if we don't care for the content: make sure resources are released!
     // We consume the HTTP entity in contrast to simply closing the response,
@@ -68,7 +66,7 @@ public class LoginCommand implements Callable<Boolean> {
     try (final CloseableHttpClient httpClient = HttpClientFactory.createHttpClient()) {
       final ServicesConfig servicesConfig = new ServicesConfig(ServicesConfig.FILENAME_SERVICES_PROPERTIES);
       final String authServiceBaseUrl = servicesConfig.getProperty(ServicesConfig.PROP_FRONTEND_BASEURL);
-      final boolean success = new LoginCommand(httpClient, authServiceBaseUrl, new LoginCredentials("test", "test")).call();
+      final boolean success = new LoginCommand(authServiceBaseUrl, LoginCredentials.USER_TEST).run(httpClient);
 
       System.out.println(String.format("Login for user test successful: %s ", success));
     }

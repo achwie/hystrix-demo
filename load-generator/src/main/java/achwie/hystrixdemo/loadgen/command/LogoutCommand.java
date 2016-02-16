@@ -1,8 +1,7 @@
 package achwie.hystrixdemo.loadgen.command;
 
-import java.util.concurrent.Callable;
-
-import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
@@ -14,18 +13,16 @@ import achwie.hystrixdemo.util.ServicesConfig;
  * @author 14.01.2016, Achim Wiedemann
  *
  */
-public class LogoutCommand implements Callable<Void> {
-  private final CloseableHttpClient httpClient;
+public class LogoutCommand implements HttpClientCommand<Void> {
   private final String logoutUrl;
 
-  public LogoutCommand(CloseableHttpClient httpClient, String frontendBaseUrl) {
-    this.httpClient = httpClient;
+  public LogoutCommand(String frontendBaseUrl) {
     this.logoutUrl = frontendBaseUrl + "/logout";
   }
 
   @Override
-  public Void call() throws Exception {
-    final CloseableHttpResponse resp = httpClient.execute(new HttpGet(logoutUrl));
+  public Void run(HttpClient httpClient) throws Exception {
+    final HttpResponse resp = httpClient.execute(new HttpGet(logoutUrl));
     // Even if we don't care for the content: make sure resources are released!
     // We consume the HTTP entity in contrast to simply closing the response,
     // because this way HttpClient will try to re-use the connection, whereas
@@ -44,7 +41,7 @@ public class LogoutCommand implements Callable<Void> {
       final ServicesConfig servicesConfig = new ServicesConfig(ServicesConfig.FILENAME_SERVICES_PROPERTIES);
       final String authServiceBaseUrl = servicesConfig.getProperty(ServicesConfig.PROP_AUTH_BASEURL);
 
-      new LogoutCommand(httpClient, authServiceBaseUrl).call();
+      new LogoutCommand(authServiceBaseUrl).run(httpClient);
     }
   }
 }
