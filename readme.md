@@ -10,23 +10,23 @@ The Spring based demo application consists of a frontend webapp that integrates 
 
 The application consists of the following business services, implemented as Maven modules:
 
-  * frontend: provides an integrated frontend the services
-  * auth: provides authentication and user management
-  * cart: creation and management of shopping carts
-  * catalog: product catalog
-  * order: processes and archives orders
-  * stock: provides an inventory system to return the stock count for items in the catalog
+  * `frontend`: provides an integrated frontend the services
+  * `auth`: provides authentication and user management
+  * `cart`: creation and management of shopping carts
+  * `catalog`: product catalog
+  * `order`: processes and archives orders
+  * `stock`: provides an inventory system to return the stock count for items in the catalog
 
 There are also some modules related to configuration and the more technical things:
 
-  * jetty-starter: common base code to run the services as standalone apps in an embedded jetty server
-  * service-urls: configures the addresses and ports under which the (business) services will run
-  * util: utility classes
+  * `jetty-starter`: common base code to run the services as standalone apps in an embedded jetty server
+  * `service-urls`: configures the addresses and ports under which the (business) services will run
+  * `util`: utility classes
   
 And finally some modules for testing:
 
-  * acceptance-tests: a small set off user acceptance tests using the small and fine [JGiven](http://jgiven.org/)
-  * load-generator: generates load to simulate user traffic
+  * `acceptance-tests`: a small set off user acceptance tests using the small and fine [JGiven](http://jgiven.org/)
+  * `load-generator`: generates load to simulate user traffic
 
 # Building
 
@@ -44,10 +44,10 @@ All the business services can be run as standalone apps, only the frontend app m
 
     $ cp service-urls/src/main/resources/services.properties.default service-urls/src/main/resources/services.properties
     
-Then adjust the newly created <service.properties> file according to your environment (hint: you shouldn't have to).
+Then adjust the newly created `service.properties` file according to your environment (hint: you shouldn't have to).
 
 The user acceptance tests can be run like JUnit tests. The load generator is a standalone java application and is also run most conveniently from within your IDE.
   
 # Disclaimer
 
-This is a naive demo application - treat the code as such.
+This is a demo application - treat the code as such.
