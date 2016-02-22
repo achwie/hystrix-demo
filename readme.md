@@ -4,7 +4,7 @@ This is a small demo application for the [Hystrix library](https://github.com/Ne
 
 # Architecture
 
-The Spring based demo application consists of a frontend webapp that integrates four business services to form a small e-commerce application. The services expose an REST interface, [Apache's HttpClient](https://hc.apache.org/) is used for communication. All business services use in memory storage for the sake of simplicity.
+The Spring based demo application consists of a frontend webapp that integrates five business services to form a small e-commerce application. The services expose an REST interface, [Apache's HttpClient](https://hc.apache.org/) is used for communication. All business services use in memory storage for the sake of simplicity.
 
 # Modules 
 
