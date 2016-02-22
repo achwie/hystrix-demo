@@ -11,11 +11,12 @@ import org.springframework.web.client.RestTemplate;
  */
 @Component
 public class StockService {
-  private final RestTemplate restTemplate = new RestTemplate();
+  private final RestTemplate restTemplate;
   private final String stockServiceBaseUrl;
 
   @Autowired
-  public StockService(@Value("${service.stock.baseurl}") String stockServiceBaseUrl) {
+  public StockService(@Value("${service.stock.baseurl}") String stockServiceBaseUrl, RestTemplate restTemplate) {
+    this.restTemplate = restTemplate;
     this.stockServiceBaseUrl = stockServiceBaseUrl;
 
   }

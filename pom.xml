@@ -31,6 +31,7 @@
     <junit.version>4.12</junit.version>
     <slf4j.version>1.7.13</slf4j.version>
     <hystrix.version>1.4.23</hystrix.version>
+    <httpclient.version>4.5.1</httpclient.version>
   </properties>
   
   <dependencyManagement>
@@ -105,6 +106,11 @@
         <groupId>com.netflix.hystrix</groupId>
         <artifactId>hystrix-metrics-event-stream</artifactId>
         <version>${hystrix.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <version>${httpclient.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

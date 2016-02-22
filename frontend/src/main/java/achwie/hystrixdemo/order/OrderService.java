@@ -16,11 +16,12 @@ import achwie.hystrixdemo.cart.Cart;
  */
 @Component
 public class OrderService {
-  private final RestTemplate restTemplate = new RestTemplate();
+  private final RestTemplate restTemplate;
   private final String orderServiceBaseUrl;
 
   @Autowired
-  public OrderService(@Value("${service.order.baseurl}") String orderServiceBaseUrl) {
+  public OrderService(@Value("${service.order.baseurl}") String orderServiceBaseUrl, RestTemplate restTemplate) {
+    this.restTemplate = restTemplate;
     this.orderServiceBaseUrl = orderServiceBaseUrl;
   }
 

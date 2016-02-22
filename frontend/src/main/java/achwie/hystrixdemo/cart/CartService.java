@@ -13,11 +13,12 @@ import achwie.hystrixdemo.catalog.CatalogItem;
  */
 @Component
 public class CartService {
-  private final RestTemplate restTemplate = new RestTemplate();
+  private final RestTemplate restTemplate;
   private final String cartServiceBaseUrl;
 
   @Autowired
-  public CartService(@Value("${service.cart.baseurl}") String cartServiceBaseUrl) {
+  public CartService(@Value("${service.cart.baseurl}") String cartServiceBaseUrl, RestTemplate restTemplate) {
+    this.restTemplate = restTemplate;
     this.cartServiceBaseUrl = cartServiceBaseUrl;
   }
 

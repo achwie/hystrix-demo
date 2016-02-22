@@ -13,11 +13,12 @@ import org.springframework.web.client.RestTemplate;
  */
 @Component
 public class CatalogService {
-  private final RestTemplate restTemplate = new RestTemplate();
+  private final RestTemplate restTemplate;
   private final String productServiceBaseUrl;
 
   @Autowired
-  public CatalogService(@Value("${service.catalog.baseurl}") String productServiceBaseUrl) {
+  public CatalogService(@Value("${service.catalog.baseurl}") String productServiceBaseUrl, RestTemplate restTemplate) {
+    this.restTemplate = restTemplate;
     this.productServiceBaseUrl = productServiceBaseUrl;
   }
 

@@ -11,13 +11,14 @@ import org.springframework.web.client.RestTemplate;
  */
 @Component
 public class AuthService {
-  private final RestTemplate restTemplate = new RestTemplate();
+  private final RestTemplate restTemplate;
   private final String authServiceBaseUrl;
   private final SessionService sessionService;
 
   @Autowired
-  public AuthService(@Value("${service.auth.baseurl}") String authServiceBaseUrl, SessionService sessionService) {
+  public AuthService(@Value("${service.auth.baseurl}") String authServiceBaseUrl, RestTemplate restTemplate, SessionService sessionService) {
     this.authServiceBaseUrl = authServiceBaseUrl;
+    this.restTemplate = restTemplate;
     this.sessionService = sessionService;
   }
 
