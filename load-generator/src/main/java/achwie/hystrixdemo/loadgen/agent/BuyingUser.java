@@ -47,7 +47,7 @@ public class BuyingUser implements Agent {
   private void putRandomItemsIntoCart(Catalog catalog, HttpClient httpClient) throws Exception {
     final List<CatalogItem> catalogItems = catalog.getItems();
     final Random rand = new Random();
-    for (int i = 0; i < rand.nextInt(maxItemsToBuy); i++) {
+    for (int i = 0; i < rand.nextInt(maxItemsToBuy) + 1; i++) {
       final CatalogItem item = catalogItems.get(rand.nextInt(catalogItems.size()));
       new AddToCartCommand(frontendBaseUrl, item.getId(), 1).run(httpClient);
     }
