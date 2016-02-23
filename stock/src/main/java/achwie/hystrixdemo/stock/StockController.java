@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import achwie.hystrixdemo.LatencySimulator;
+
 /**
  * 
  * @author 30.11.2015, Achim Wiedemann
@@ -26,6 +28,8 @@ public class StockController {
 
   @RequestMapping(value = "/{productId}", method = RequestMethod.GET)
   public ResponseEntity<Integer> getQuantity(@PathVariable String productId) {
+    LatencySimulator.beLatent();
+
     final int quantity = stockService.getStockQuantity(productId);
 
     final HttpStatus status = (quantity != -1) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
@@ -34,6 +38,8 @@ public class StockController {
 
   @RequestMapping(value = "/put-hold-on-all", method = RequestMethod.POST)
   public ResponseEntity<String> putHoldOnAll(@RequestBody PutProductsOnHoldRequest holdRequest) {
+    LatencySimulator.beLatent();
+
     String msg = "OK";
     HttpStatus code = HttpStatus.OK;
     try {
