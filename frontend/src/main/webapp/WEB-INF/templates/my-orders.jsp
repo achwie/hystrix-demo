@@ -5,7 +5,7 @@
   <table>
     <c:forEach items="${orders}" var="order">
       <tr>
-        <th colspan="2">Ordered on <c:out value="${String.format(" %TF", order.getOrderDate())}" /></th>
+        <th colspan="2">Ordered on <c:out value='${String.format("%TF", order.getOrderDate())}' /></th>
       </tr>
       <c:forEach items="${order.orderItems}" var="orderItem">
         <tr>
