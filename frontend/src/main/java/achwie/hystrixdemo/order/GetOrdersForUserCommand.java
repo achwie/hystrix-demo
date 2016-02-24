@@ -17,7 +17,7 @@ class GetOrdersForUserCommand extends HystrixRestCommand<List<Order>> {
   private final String url;
 
   protected GetOrdersForUserCommand(RestOperations restOps, String orderServiceBaseUrl, String sessionId) {
-    super(CommandGroup.ORDER_GET_FOR_USER, restOps);
+    super(CommandGroup.ORDER_SERVICE, restOps);
     this.url = orderServiceBaseUrl + "/" + sessionId;
   }
 

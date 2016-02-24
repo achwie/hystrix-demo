@@ -22,7 +22,7 @@ class LoginCommand extends HystrixRestCommand<User> {
   private MessageDigest sha1Digest;
 
   public LoginCommand(RestOperations restOps, String authServiceBaseUrl, String sessionId, String username, String password) {
-    super(CommandGroup.AUTH_LOGIN, restOps);
+    super(CommandGroup.AUTH_SERVICE, restOps);
     this.url = authServiceBaseUrl + "/" + sessionId;
     this.username = username;
     this.password = password;

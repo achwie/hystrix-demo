@@ -14,7 +14,7 @@ class LogoutCommand extends HystrixRestCommand<Void> {
   private final String url;
 
   protected LogoutCommand(RestOperations restOps, String authServiceBaseUrl, String sessionId) {
-    super(CommandGroup.AUTH_LOGOUT, restOps);
+    super(CommandGroup.AUTH_SERVICE, restOps);
     this.url = authServiceBaseUrl + "/" + sessionId;
   }
 

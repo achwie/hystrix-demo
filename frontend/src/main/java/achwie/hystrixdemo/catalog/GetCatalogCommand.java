@@ -17,7 +17,7 @@ class GetCatalogCommand extends HystrixRestCommand<List<CatalogItem>> {
   private final String url;
 
   public GetCatalogCommand(RestOperations restOps, String productServiceBaseUrl) {
-    super(CommandGroup.CATALOG_GET, restOps);
+    super(CommandGroup.CATALOG_SERVICE, restOps);
     this.url = productServiceBaseUrl;
   }
 

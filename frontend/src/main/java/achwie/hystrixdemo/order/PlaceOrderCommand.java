@@ -18,7 +18,7 @@ class PlaceOrderCommand extends HystrixRestCommand<Boolean> {
   private final Cart cart;
 
   protected PlaceOrderCommand(RestOperations restOps, String orderServiceBaseUrl, String sessionId, Cart cart) {
-    super(CommandGroup.ORDER_PLACE, restOps);
+    super(CommandGroup.ORDER_SERVICE, restOps);
     this.url = orderServiceBaseUrl + "/" + sessionId;
     this.cart = cart;
   }

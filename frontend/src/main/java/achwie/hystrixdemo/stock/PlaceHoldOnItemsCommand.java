@@ -17,7 +17,7 @@ class PlaceHoldOnItemsCommand extends HystrixRestCommand<Boolean> {
   private int[] quantities;
 
   protected PlaceHoldOnItemsCommand(RestOperations restOps, String stockServiceBaseUrl, String[] productIds, int[] quantities) {
-    super(CommandGroup.STOCK_PLACE_HOLD, restOps);
+    super(CommandGroup.STOCK_SERVICE, restOps);
     this.url = stockServiceBaseUrl + "/put-hold-on-all";
     this.productIds = productIds;
     this.quantities = quantities;

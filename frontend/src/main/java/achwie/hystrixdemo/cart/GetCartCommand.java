@@ -15,7 +15,7 @@ class GetCartCommand extends HystrixRestCommand<Cart> {
   private final String url;
 
   protected GetCartCommand(RestOperations restOps, String cartServiceBaseUrl, String cartId) {
-    super(CommandGroup.CART_GET, restOps);
+    super(CommandGroup.CART_SERVICE, restOps);
     this.url = cartServiceBaseUrl + "/" + cartId;
   }
 

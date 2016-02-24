@@ -15,7 +15,7 @@ class GetStockQuantityCommand extends HystrixRestCommand<Integer> {
   private final String url;
 
   protected GetStockQuantityCommand(RestOperations restOps, String stockServiceBaseUrl, String productId) {
-    super(CommandGroup.STOCK_GET_QUANTITY, restOps);
+    super(CommandGroup.STOCK_SERVICE, restOps);
     this.url = stockServiceBaseUrl + "/" + productId;
   }
 

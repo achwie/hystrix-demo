@@ -14,7 +14,7 @@ class ClearCartCommand extends HystrixRestCommand<Void> {
   private final String url;
 
   protected ClearCartCommand(RestOperations restOps, String cartServiceBaseUrl, String cartId) {
-    super(CommandGroup.CART_CLEAR, restOps);
+    super(CommandGroup.CART_SERVICE, restOps);
     this.url = cartServiceBaseUrl + "/" + cartId;
   }
 

@@ -17,7 +17,7 @@ class AddToCartCommand extends HystrixRestCommand<Void> {
   private final int quantity;
 
   protected AddToCartCommand(RestOperations restOps, String cartServiceBaseUrl, String cartId, CatalogItem catalogItem, int quantity) {
-    super(CommandGroup.CART_ADD_ITEM, restOps);
+    super(CommandGroup.CART_SERVICE, restOps);
     this.url = cartServiceBaseUrl + "/" + cartId;
     this.catalogItem = catalogItem;
     this.quantity = quantity;
