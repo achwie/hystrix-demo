@@ -34,7 +34,7 @@ The whole project can be built via Maven:
 
     $ mvn clean install
 
-In case you want to generate IDE files for Eclispe you can use:
+In case you want to generate IDE files for Eclipse you can use:
 
     $ mvn eclipse:eclipse -Dwtpversion=2.0
     
