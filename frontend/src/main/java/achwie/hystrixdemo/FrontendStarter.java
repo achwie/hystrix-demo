@@ -8,8 +8,15 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.jasper.servlet.JspServlet;
+import org.apache.tomcat.InstanceManager;
+import org.apache.tomcat.SimpleInstanceManager;
+import org.eclipse.jetty.annotations.ServletContainerInitializersStarter;
+import org.eclipse.jetty.apache.jsp.JettyJasperInitializer;
+import org.eclipse.jetty.plus.annotation.ContainerInitializer;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -59,6 +66,12 @@ public class FrontendStarter {
         context.setAttribute("org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern",
             ".*/[^/]*servlet-api-[^/]*\\.jar$|.*/javax.servlet.jsp.jstl-.*\\.jar$|.*/.*taglibs.*\\.jar$");
         context.addServlet(holderDefault, "/");
+
+        // Do some configuration to make JSTL work (thanks to
+        // http://bengreen.eu/fancyhtml/quickreference/jettyjsp9error.html)
+        context.setAttribute("org.eclipse.jetty.containerInitializers", jspInitializers());
+        context.setAttribute(InstanceManager.class.getName(), new SimpleInstanceManager());
+        context.addBean(new ServletContainerInitializersStarter(context), true);
       }
     };
 
@@ -77,5 +90,13 @@ public class FrontendStarter {
 
     jspTempDir.deleteOnExit();
     return jspTempDir;
+  }
+
+  private static List<ContainerInitializer> jspInitializers() {
+    JettyJasperInitializer sci = new JettyJasperInitializer();
+    ContainerInitializer initializer = new ContainerInitializer(sci, null);
+    List<ContainerInitializer> initializers = new ArrayList<ContainerInitializer>();
+    initializers.add(initializer);
+    return initializers;
   }
 }

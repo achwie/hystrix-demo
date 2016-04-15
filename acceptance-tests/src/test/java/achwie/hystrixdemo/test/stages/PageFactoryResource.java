@@ -21,7 +21,7 @@ import achwie.hystrixdemo.test.pages.OrderPlacedPage;
  */
 public class PageFactoryResource extends ExternalResource {
   // TODO: Don't hardcode this!
-  public static final String BASE_URL = "http://localhost:8080/hystrix-demo-frontend";
+  public static final String BASE_URL = "http://localhost:8080";
   public WebDriver driver;
 
   public CatalogPage createCatalogPage() {
