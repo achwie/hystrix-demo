@@ -13,4 +13,4 @@
 acceptance-tests/jgiven-reports
 
 # Local environment settings
-service-urls/src/main/resources/services.properties
+service-urls/src/main/resources/config/application.properties

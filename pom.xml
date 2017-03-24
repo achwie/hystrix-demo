@@ -8,9 +8,25 @@
   <artifactId>hystrix-demo</artifactId>
   <version>0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
+  
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>1.5.2.RELEASE</version>
+  </parent>  
+
+  <!--
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>1.5.2.RELEASE</version>
+  </parent>
+  -->
 
   <modules>
+    <!--
     <module>frontend</module>
+    -->
     <module>stock</module>
     <module>catalog</module>
     <module>cart</module>
@@ -18,11 +34,15 @@
     <module>order</module>
     <module>service-urls</module>
     <module>util</module>
+    <!--
     <module>jetty-starter</module>
+    -->
   </modules>
   
 
   <properties>
+    <java.version>1.8</java.version>
+  <!--
     <spring.version>4.2.2.RELEASE</spring.version>
     <jetty.version>9.3.5.v20151012</jetty.version>
     <servlet-api.version>3.1.0</servlet-api.version>
@@ -30,12 +50,16 @@
     <jackson.version>2.5.3</jackson.version>
     <junit.version>4.12</junit.version>
     <slf4j.version>1.7.13</slf4j.version>
+-->    
     <hystrix.version>1.4.23</hystrix.version>
+<!--
     <httpclient.version>4.5.1</httpclient.version>
+  -->
   </properties>
   
   <dependencyManagement>
     <dependencies>
+  <!--
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-webmvc</artifactId>
@@ -102,6 +126,7 @@
         <artifactId>slf4j-simple</artifactId>
         <version>${slf4j.version}</version>
       </dependency>
+-->      
       <dependency>
         <groupId>com.netflix.hystrix</groupId>
         <artifactId>hystrix-core</artifactId>
@@ -112,14 +137,17 @@
         <artifactId>hystrix-metrics-event-stream</artifactId>
         <version>${hystrix.version}</version>
       </dependency>
+<!--      
       <dependency>
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpclient</artifactId>
         <version>${httpclient.version}</version>
       </dependency>
+    -->
     </dependencies>
   </dependencyManagement>
 
+  <!--
   <build>
     <pluginManagement>
       <plugins>
@@ -134,4 +162,5 @@
       </plugins>
     </pluginManagement>
   </build>
+  -->
 </project>

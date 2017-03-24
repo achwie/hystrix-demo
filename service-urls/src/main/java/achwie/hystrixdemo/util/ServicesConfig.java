@@ -14,7 +14,7 @@ import java.util.Properties;
  *
  */
 public class ServicesConfig {
-  public static final String FILENAME_SERVICES_PROPERTIES = "/services.properties";
+  public static final String FILENAME_SERVICES_PROPERTIES = "/config/application.properties";
   public static final String PROP_FRONTEND_BASEURL = "service.frontend.baseurl";
   public static final String PROP_STOCK_BASEURL = "service.stock.baseurl";
   public static final String PROP_CATALOG_BASEURL = "service.catalog.baseurl";
