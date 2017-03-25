@@ -3,37 +3,42 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>achwie</groupId>
-    <artifactId>hystrix-demo</artifactId>
-    <version>0.1-SNAPSHOT</version>
-  </parent>
   <groupId>achwie</groupId>
   <artifactId>hystrix-demo-acceptance-tests</artifactId>
   <version>0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
+  
+  <!-- Not using parent POM here since Spring Boot seems to mess up my Selenium config -->
+  
+  <properties>
+    <junit.version>4.12</junit.version>
+    <selenium.version>2.48.2</selenium.version>
+    <jgiven.version>0.14.1</jgiven.version>
+  </properties>
 
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.tngtech.jgiven</groupId>
       <artifactId>jgiven-junit</artifactId>
-      <version>0.9.5</version>
+      <version>${jgiven.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>
-      <version>2.48.2</version>
+      <version>${selenium.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-htmlunit-driver</artifactId>
-      <version>2.48.2</version>
+      <version>${selenium.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -55,7 +60,7 @@
       <plugin>
         <groupId>com.tngtech.jgiven</groupId>
         <artifactId>jgiven-maven-plugin</artifactId>
-        <version>0.9.5</version>
+        <version>${jgiven.version}</version>
         <executions>
           <execution>
             <goals>

@@ -55,5 +55,4 @@ public class PageFactoryResource extends ExternalResource {
   protected void after() {
     driver.close();
   }
-
 }

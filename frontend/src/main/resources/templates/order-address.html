@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Shipping Address</title>
+  </head>
+  
+  <body>
+    <h1>Shipping address</h1>
+    
+    <form action="place-order" method="POST">
+      <table>
+        <tr>
+          <td>Name:</td>
+          <td><input name="name" /></td>
+        </tr>
+        <tr>
+          <td>Address:</td>
+          <td><input name="address" /></td>
+        </tr>
+        <tr>
+          <td>City:</td>
+          <td><input name="city" /></td>
+        </tr>
+        <tr>
+          <td>ZIP:</td>
+          <td><input name="zip" /></td>
+        </tr>
+        <tr>
+          <td>Country:</td>
+          <td><input name="country" /></td>
+        </tr>
+      </table>
+      <input id="place-order-btn" type="submit" value="Place order" />
+    </form>
+  </body>
+</html>  

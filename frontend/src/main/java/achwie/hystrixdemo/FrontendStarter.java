@@ -1,102 +1,43 @@
 package achwie.hystrixdemo;
 
-import static achwie.hystrixdemo.util.ServicesConfig.FILENAME_SERVICES_PROPERTIES;
-import static achwie.hystrixdemo.util.ServicesConfig.PROP_FRONTEND_BASEURL;
+import javax.servlet.Filter;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-import org.apache.jasper.servlet.JspServlet;
-import org.apache.tomcat.InstanceManager;
-import org.apache.tomcat.SimpleInstanceManager;
-import org.eclipse.jetty.annotations.ServletContainerInitializersStarter;
-import org.eclipse.jetty.apache.jsp.JettyJasperInitializer;
-import org.eclipse.jetty.plus.annotation.ContainerInitializer;
-import org.eclipse.jetty.servlet.DefaultServlet;
-import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.webapp.WebAppContext;
+import com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet;
 
-import achwie.hystrixdemo.util.ServicesConfig;
+import achwie.hystrixdemo.auth.SecurityFilterProxy;
+import achwie.hystrixdemo.auth.SessionService;
 
 /**
  * 
  * @author 02.01.2016, Achim Wiedemann
  */
-// TODO: This doesn't work yet - there's still some issue with taglibs. So for
-// now I'll just deploy this webapp in Tomcat
+@SpringBootApplication
+@Configuration
 public class FrontendStarter {
   public static void main(String[] args) throws Exception {
-    final URI webrootUri = new File("src/main/webapp").toURI();
-
-    // Set JSP to use Standard JavaC always
-    System.setProperty("org.apache.jasper.compiler.disablejsr199", "false");
-
-    final File jspTempDir = createJspTempDir();
-    final ServicesConfig servicesConfig = new ServicesConfig(FILENAME_SERVICES_PROPERTIES);
-    final URI frontendServiceBaseUri = servicesConfig.getPropertyAsURI(PROP_FRONTEND_BASEURL);
-
-    final JettyStarter starter = new JettyStarter(frontendServiceBaseUri.getPort()) {
-      @Override
-      protected void configureContext(WebAppContext context) {
-        super.configureContext(context);
-
-        context.setAttribute("javax.servlet.context.tempdir", jspTempDir);
-
-        // Set Classloader of Context to be sane (needed for JSTL)
-        // JSP requires a non-System classloader, this simply wraps the
-        // embedded System classloader in a way that makes it suitable
-        // for JSP to use
-        ClassLoader jspClassLoader = new URLClassLoader(new URL[0], this.getClass().getClassLoader());
-        context.setClassLoader(jspClassLoader);
-
-        // Add JSP Servlet (must be named "jsp")
-        ServletHolder holderJsp = new ServletHolder("jsp", JspServlet.class);
-        holderJsp.setInitOrder(0);
-
-        // Add Default Servlet (must be named "default")
-        ServletHolder holderDefault = new ServletHolder("default", DefaultServlet.class);
-        holderDefault.setInitParameter("resourceBase", webrootUri.toASCIIString());
-        holderDefault.setInitParameter("dirAllowed", "true");
-
-        context.setAttribute("org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern",
-            ".*/[^/]*servlet-api-[^/]*\\.jar$|.*/javax.servlet.jsp.jstl-.*\\.jar$|.*/.*taglibs.*\\.jar$");
-        context.addServlet(holderDefault, "/");
-
-        // Do some configuration to make JSTL work (thanks to
-        // http://bengreen.eu/fancyhtml/quickreference/jettyjsp9error.html)
-        context.setAttribute("org.eclipse.jetty.containerInitializers", jspInitializers());
-        context.setAttribute(InstanceManager.class.getName(), new SimpleInstanceManager());
-        context.addBean(new ServletContainerInitializersStarter(context), true);
-      }
-    };
-
-    starter.start();
+    SpringApplication.run(FrontendStarter.class, args);
   }
 
-  private static File createJspTempDir() throws IOException {
-    File tempDir = new File(System.getProperty("java.io.tmpdir"));
-    File jspTempDir = new File(tempDir, "embedded-jetty-jsp");
-
-    if (!jspTempDir.exists()) {
-      if (!jspTempDir.mkdirs()) {
-        throw new IOException("Unable to create JSP temp directory: " + jspTempDir);
-      }
-    }
-
-    jspTempDir.deleteOnExit();
-    return jspTempDir;
+  @Bean
+  public Filter createHystrixContextInitializationFilter() {
+    return new HystrixContextInitializerFilter();
   }
 
-  private static List<ContainerInitializer> jspInitializers() {
-    JettyJasperInitializer sci = new JettyJasperInitializer();
-    ContainerInitializer initializer = new ContainerInitializer(sci, null);
-    List<ContainerInitializer> initializers = new ArrayList<ContainerInitializer>();
-    initializers.add(initializer);
-    return initializers;
+  @Bean
+  @Autowired
+  public Filter createSecurityFilterProxy(SessionService sessionService) {
+    return new SecurityFilterProxy(sessionService);
+  }
+
+  @Bean
+  public ServletRegistrationBean createHystrixMetricsStreamServlet() {
+    return new ServletRegistrationBean(new HystrixMetricsStreamServlet(), "/hystrix.stream");
   }
 }

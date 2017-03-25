@@ -1,5 +1,11 @@
+#
+# Central config for ports and service URLs which are used in the service
+# modules.
+#
+
 # Frontend webapp
-service.frontend.baseurl = http://localhost:8080/hystrix-demo-frontend
+service.frontend.port=8080
+service.frontend.baseurl = http://localhost:${service.frontend.port}
 
 # Stock service
 service.stock.port=8081

@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Login</title>
+  </head>
+  
+  <body>
+    <h1>Login</h1>
+    
+    <form action="login" method="POST">
+      <input type="hidden" name="referrer" th:value="${referrer}" />
+      <table>
+        <tr>
+          <th>Username:</th>
+          <th><input name="username" /></th>
+        </tr>
+        <tr>
+          <th>Password:</th>
+          <th><input type="password" name="password" /></th>
+        </tr>
+      </table>
+      <input type="submit" value="Login" />
+    </form>
+  </body>
+</html>

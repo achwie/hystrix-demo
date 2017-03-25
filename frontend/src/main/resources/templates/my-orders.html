@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>My Orders</title>
+  </head>
+  
+  <body>
+    <h1>My orders</h1>
+    
+    <table th:if="${not orders.empty}">
+      <th:block th:each="order : ${orders}">
+        <tr>
+          <th colspan="2">Ordered on <span th:text='${order.orderDateFormatted}'>12.12.2012</span></th>
+        </tr>
+        <tr th:each="orderItem : ${order.orderItems}">
+          <td th:text="${orderItem.productName}">Umbrella</td>
+          <td th:text="${orderItem.quantity}">2</td>
+        </tr>
+        <tr>
+          <td colspan="2"><hr /></td>
+        </tr>
+      </th:block>
+    </table>
+    
+    <p th:if="${orders.empty}">There is no order history for your account.</p>
+    
+    <a href="catalog">Back to catalog</a>
+  </body>
+</html>

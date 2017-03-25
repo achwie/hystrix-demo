@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Catalog</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  
+  <body>
+    <h1>Product Catalog</h1>
+    <div th:if="${user.loggedIn}" id="login-status">You are logged in as <span th:text="${user.userName}">John Doe</span>. <a id="logout-link" href="logout">Log out</a></div>
+    <div th:if="${not user.loggedIn}" id="login-status">You are not logged in. <a id="login-link" href="login">Log in</a></div>
+    <div><a id="cart-link" href="view-cart">Items in cart: <span th:text="${cart.totalItemCount}">5</span></a></div>
+    
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Stock</th>
+        <th>Action</th>
+      </tr>
+      <tr th:each="catalogItem : ${catalogItems}">
+        <td th:text="${catalogItem.name}">Fork</td>
+        <td th:text="${catalogItem.stockQuantity}" th:id="'stock-count-' + ${catalogItem.id}">314</td>
+        <td>
+          <form action="add-to-cart" method="POST" th:id="'add-item-' + ${catalogItem.id}">
+            <input type="hidden" name="productId" th:value="${catalogItem.id}" />
+            <input type="hidden" name="quantity" value="1" size="2"/> <button type="submit">Add to Cart</button>
+          </form>
+        </td>
+      </tr>
+    </table>
+    
+    <div th:if="${user.loggedIn}"><a id="order-history-link" href="my-orders">View my orders</a></div>
+  </body>
+</html>

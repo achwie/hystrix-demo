@@ -40,6 +40,10 @@ public class Order {
     return copy;
   }
 
+  public String getOrderDateFormatted() {
+    return String.format("%TF", getOrderDate());
+  }
+
   public Object getUserId() {
     return userId;
   }

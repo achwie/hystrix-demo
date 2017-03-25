@@ -44,7 +44,8 @@ public class CatalogPage {
   }
 
   public boolean isUserOnPage() {
-    return driver.getCurrentUrl().equals(pageUrl());
+    // TODO: HtmlUnit appends jsessionid to the URL - are cookies disabled?
+    return driver.getCurrentUrl().startsWith(pageUrl());
   }
 
   private String pageUrl() {
