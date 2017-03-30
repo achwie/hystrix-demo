@@ -8,6 +8,7 @@ import achwie.hystrixdemo.test.pages.CartPage;
 import achwie.hystrixdemo.test.pages.CatalogPage;
 import achwie.hystrixdemo.test.pages.LoginPage;
 import achwie.hystrixdemo.test.pages.OrderHistoryPage;
+import achwie.hystrixdemo.test.scenarios.TestUser;
 
 /**
  * 
@@ -27,11 +28,11 @@ public abstract class WhenBaseStage<SELF extends WhenBaseStage<SELF>> extends St
   @ScenarioStage
   protected WhenOnCatalogPageStage catalogStage;
 
-  public WhenOnCatalogPageStage user_logs_in_with_credentials(String username, String password) {
+  public WhenOnCatalogPageStage user_logs_in_as(TestUser user) {
     if (!loginPage.isUserOnPage())
       loginPage.openPage();
 
-    loginPage.loginWithCredentials(username, password);
+    loginPage.loginWithCredentials(user.username, user.password);
 
     return catalogStage;
   }
