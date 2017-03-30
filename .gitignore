@@ -1,10 +1,10 @@
 # Eclipse files
 */.classpath
 */.project
-*/.settings/org.eclipse.jdt.core.prefs
-*/.settings/org.eclipse.wst.common.component
-*/.settings/org.eclipse.wst.common.project.facet.core.xml
+*/.settings/*
 */.wtpmodules
+# EGit seems to create these in every module
+*/.gitignore
 
 # Compiled files
 */target/*
