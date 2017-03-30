@@ -19,7 +19,7 @@ public class OrderScenarioTest extends ScenarioTest<GivenStage, WhenOnCatalogPag
   private static final String PRODUCT_ID_BOOK = "1";
 
   @Test
-  public void loggedInCustomerShouldBeAbleToPlaceAnOrder() {
+  public void logged_in_customer_should_be_able_to_place_an_order() {
     given().user_is_logged_in_as(USER_TEST.username, USER_TEST.password).and().user_is_on_catalog_page();
     when().user_adds_item_to_cart(PRODUCT_ID_BOOK, 1).and().user_opens_cart_page().and().user_follows_shipping_address_link().and()
         .user_enters_some_shipping_address().and().user_places_order();
@@ -27,7 +27,7 @@ public class OrderScenarioTest extends ScenarioTest<GivenStage, WhenOnCatalogPag
   }
 
   @Test
-  public void placedOrdersAreShownInOrderHistory() {
+  public void placed_orders_are_shown_in_order_history() {
     given().user_is_logged_in_as(USER_TEST.username, USER_TEST.password).and().user_is_on_catalog_page();
     when().user_adds_item_to_cart(PRODUCT_ID_BOOK, 1).and().user_opens_cart_page().and().user_follows_shipping_address_link().and()
         .user_enters_some_shipping_address().and().user_places_order().and().user_opnes_order_history_page();

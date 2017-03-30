@@ -19,21 +19,22 @@ public class CartScenarioTest extends ScenarioTest<GivenStage, WhenOnCatalogPage
   private static final String PRODUCT_ID_BOOK = "1";
 
   @Test
-  public void itemThatWasAddedBeforeLoginIsStillInCartAfterLogin() {
+  public void item_that_was_added_before_login_is_still_in_cart_after_login() {
     given().user_is_on_catalog_page().and().user_is_not_logged_in();
-    when().user_adds_item_to_cart(PRODUCT_ID_BOOK, 1).and().user_logs_in_with_credentials(USER_TEST.username, USER_TEST.password).and().user_opens_cart_page();
+    when().user_adds_item_to_cart(PRODUCT_ID_BOOK, 1).and().user_logs_in_with_credentials(USER_TEST.username, USER_TEST.password).and()
+        .user_opens_cart_page();
     then().user_should_see_cart_item_count_of(1);
   }
 
   @Test
-  public void cartIsClearedAfterLogout() {
+  public void cart_is_cleared_after_logout() {
     given().user_is_logged_in_as(USER_TEST.username, USER_TEST.password);
     when().user_adds_item_to_cart(PRODUCT_ID_BOOK, 1).and().user_logs_out().and().user_opens_cart_page();
     then().user_should_see_cart_item_count_of(0);
   }
 
   @Test
-  public void addedItemAppearsInCart() {
+  public void added_item_appears_in_cart() {
     given().user_is_logged_in_as(USER_TEST.username, USER_TEST.password);
     when().user_adds_item_to_cart(PRODUCT_ID_BOOK, 1).and().user_opens_cart_page();
     then().user_should_see_cart_item_count_of(1);
