@@ -24,7 +24,7 @@ public class WhenOnOrderAddressPageStage extends WhenBaseStage<WhenOnOrderAddres
   public WhenOnOrderAddressPageStage user_enters_some_shipping_address() {
     orderAdressPage.enterShippingAddress(SOME_ADDRESS_NAME, SOME_ADDRESS_ADDRESS, SOME_ADDRESS_CITY, SOME_ADDRESS_ZIP, SOME_ADDRESS_COUNTRY);
 
-    return self();
+    return this;
   }
 
   public WhenOnOrderSuccessfulPageStage user_places_order() {

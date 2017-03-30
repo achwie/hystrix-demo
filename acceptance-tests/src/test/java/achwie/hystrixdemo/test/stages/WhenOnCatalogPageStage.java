@@ -10,6 +10,6 @@ public class WhenOnCatalogPageStage extends WhenBaseStage<WhenOnCatalogPageStage
     for (int i = 0; i < quantity; i++)
       catalogPage.addProductToCart(productId);
 
-    return self();
+    return this;
   }
 }

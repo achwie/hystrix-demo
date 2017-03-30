@@ -16,7 +16,7 @@ public class GivenOnCatalogPageStage extends Stage<GivenOnCatalogPageStage> {
   public GivenOnCatalogPageStage user_follows_login_link() {
     catalogPage.clickLogIn();
 
-    return self();
+    return this;
   }
 
   public GivenOnCatalogPageStage user_is_not_logged_in() {
@@ -25,6 +25,6 @@ public class GivenOnCatalogPageStage extends Stage<GivenOnCatalogPageStage> {
 
     catalogPage.clickLogOutIfAvailable();
 
-    return self();
+    return this;
   }
 }

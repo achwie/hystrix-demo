@@ -52,12 +52,12 @@ public class GivenStage extends Stage<GivenStage> {
 
   public GivenStage user_is_on_login_page() {
     loginPage.openPage();
-    return self();
+    return this;
   }
 
   public GivenStage user_is_logged_in_as(String username, String password) {
     loginPage.openPage();
     loginPage.loginWithCredentials(username, password);
-    return self();
+    return this;
   }
 }

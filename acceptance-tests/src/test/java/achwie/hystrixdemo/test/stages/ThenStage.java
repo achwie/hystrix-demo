@@ -31,7 +31,7 @@ public class ThenStage extends Stage<ThenStage> {
 
     assertFalse("User was expected to not be logged in by default!", isLoggedIn);
 
-    return self();
+    return this;
   }
 
   public ThenStage user_should_be_logged_in_on_catalog_page_as(String username) {
@@ -40,7 +40,7 @@ public class ThenStage extends Stage<ThenStage> {
 
     assertFalse("User was expected to be logged in!", isLoggedInAsUser);
 
-    return self();
+    return this;
   }
 
   public void user_should_be_on_catalog_page() {
