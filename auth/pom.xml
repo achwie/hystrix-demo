@@ -29,6 +29,11 @@
       <artifactId>hystrix-demo-util</artifactId>
       <version>0.1-SNAPSHOT</version>
     </dependency>
+    <dependency>
+      <groupId>achwie</groupId>
+      <artifactId>hystrix-demo-service-urls</artifactId>
+      <version>0.1-SNAPSHOT</version>
+    </dependency>
   </dependencies>
 
   <build>
