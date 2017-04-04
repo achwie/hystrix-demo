@@ -2,20 +2,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
   <groupId>achwie</groupId>
   <artifactId>hystrix-demo-acceptance-tests</artifactId>
   <version>0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
-  
-  <!-- Not using parent POM here since Spring Boot seems to mess up my Selenium config -->
-  
+  <!-- Not using parent POM here since Spring Boot seems to mess up my Selenium 
+    config -->
   <properties>
     <junit.version>4.12</junit.version>
     <selenium.version>2.48.2</selenium.version>
     <jgiven.version>0.14.1</jgiven.version>
   </properties>
-
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -42,7 +39,6 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
   <build>
     <pluginManagement>
       <plugins>
@@ -70,6 +66,15 @@
         </executions>
         <configuration>
           <format>html</format>
+        </configuration>
+      </plugin>
+      <!-- Make sure build never fails, otherwise we won't get reports if 
+        there are test failures -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <testFailureIgnore>true</testFailureIgnore>
         </configuration>
       </plugin>
     </plugins>
