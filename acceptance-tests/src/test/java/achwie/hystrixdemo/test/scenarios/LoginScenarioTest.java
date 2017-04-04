@@ -9,6 +9,7 @@ import com.tngtech.jgiven.junit.ScenarioTest;
 import achwie.hystrixdemo.test.stages.GivenStage;
 import achwie.hystrixdemo.test.stages.ThenStage;
 import achwie.hystrixdemo.test.stages.WhenOnCatalogPageStage;
+import achwie.hystrixdemo.test.tags.Critical;
 
 /**
  * 
@@ -16,6 +17,7 @@ import achwie.hystrixdemo.test.stages.WhenOnCatalogPageStage;
  */
 public class LoginScenarioTest extends ScenarioTest<GivenStage, WhenOnCatalogPageStage, ThenStage> {
 
+  @Critical
   @Test
   public void user_not_logged_in_by_default() {
     given()
@@ -25,6 +27,7 @@ public class LoginScenarioTest extends ScenarioTest<GivenStage, WhenOnCatalogPag
         .user_should_not_be_logged_in();
   }
 
+  @Critical
   @Test
   public void user_logged_in_after_login() {
     given()
