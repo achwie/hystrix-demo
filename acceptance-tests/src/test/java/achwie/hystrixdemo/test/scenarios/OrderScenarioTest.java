@@ -9,7 +9,8 @@ import com.tngtech.jgiven.junit.ScenarioTest;
 import achwie.hystrixdemo.test.stages.GivenStage;
 import achwie.hystrixdemo.test.stages.ThenStage;
 import achwie.hystrixdemo.test.stages.WhenOnCatalogPageStage;
-import achwie.hystrixdemo.test.tags.Critical;
+import achwie.hystrixdemo.test.tags.BusinessCritical;
+import achwie.hystrixdemo.test.tags.Payment;
 
 /**
  * 
@@ -19,7 +20,8 @@ import achwie.hystrixdemo.test.tags.Critical;
 public class OrderScenarioTest extends ScenarioTest<GivenStage, WhenOnCatalogPageStage, ThenStage> {
   private static final String PRODUCT_ID_BOOK = "1";
 
-  @Critical
+  @Payment
+  @BusinessCritical
   @Test
   public void logged_in_customer_should_be_able_to_place_an_order() {
     given()
@@ -35,7 +37,7 @@ public class OrderScenarioTest extends ScenarioTest<GivenStage, WhenOnCatalogPag
         .user_should_be_on_order_success_page();
   }
 
-  @Critical
+  @BusinessCritical
   @Test
   public void placed_orders_are_shown_in_order_history() {
     given()

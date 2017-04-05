@@ -5,8 +5,8 @@ import java.lang.annotation.RetentionPolicy;
 
 import com.tngtech.jgiven.annotation.IsTag;
 
-@IsTag(value = "Critical", description = "A feature that is critical for the user")
+@IsTag(value = "Payment related", description = "Features that involve the payment gateway")
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Critical {
+public @interface Payment {
 
 }

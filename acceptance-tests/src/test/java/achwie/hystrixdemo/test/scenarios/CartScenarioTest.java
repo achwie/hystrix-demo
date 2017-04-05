@@ -9,7 +9,7 @@ import com.tngtech.jgiven.junit.ScenarioTest;
 import achwie.hystrixdemo.test.stages.GivenStage;
 import achwie.hystrixdemo.test.stages.ThenStage;
 import achwie.hystrixdemo.test.stages.WhenOnCatalogPageStage;
-import achwie.hystrixdemo.test.tags.Critical;
+import achwie.hystrixdemo.test.tags.BusinessCritical;
 
 /**
  * 
@@ -44,7 +44,7 @@ public class CartScenarioTest extends ScenarioTest<GivenStage, WhenOnCatalogPage
         .user_should_see_cart_item_count_of(0);
   }
 
-  @Critical
+  @BusinessCritical
   @Test
   public void added_item_appears_in_cart() {
     given()
