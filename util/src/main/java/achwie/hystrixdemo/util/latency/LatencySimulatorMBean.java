@@ -6,7 +6,7 @@ package achwie.hystrixdemo.util.latency;
  *
  */
 public interface LatencySimulatorMBean {
-  public void setLatency(int latencyMillis);
+  public void setLatencyMillis(int latencyMillis);
 
-  public int getLatency();
+  public int getLatencyMillis();
 }

@@ -15,12 +15,12 @@ public class LatencySimulator implements LatencySimulatorMBean {
   private volatile int latencyMillis = 0;
 
   @Override
-  public void setLatency(int latencyMillis) {
+  public void setLatencyMillis(int latencyMillis) {
     this.latencyMillis = latencyMillis;
   }
 
   @Override
-  public int getLatency() {
+  public int getLatencyMillis() {
     return latencyMillis;
   }
 
@@ -29,7 +29,7 @@ public class LatencySimulator implements LatencySimulatorMBean {
       // For sure this could be done more clever with Spring
       final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
       final ObjectName name = ObjectName.getInstance(LatencySimulator.OBJECT_NAME);
-      final Integer latencyMillis = (Integer) mbs.getAttribute(name, "Latency");
+      final Integer latencyMillis = (Integer) mbs.getAttribute(name, "LatencyMillis");
 
       if (latencyMillis > 0) {
         try {
