@@ -8,6 +8,8 @@ import javax.management.ObjectName;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import achwie.hystrixdemo.util.latency.LatencySimulator;
+
 /**
  * 
  * @author 02.01.2016, Achim Wiedemann

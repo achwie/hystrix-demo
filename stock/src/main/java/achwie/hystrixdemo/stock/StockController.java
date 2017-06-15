@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import achwie.hystrixdemo.LatencySimulator;
+import achwie.hystrixdemo.util.latency.LatencySimulator;
 
 /**
  * 

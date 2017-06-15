@@ -1,4 +1,4 @@
-package achwie.hystrixdemo;
+package achwie.hystrixdemo.util.latency;
 
 import java.lang.management.ManagementFactory;
 
