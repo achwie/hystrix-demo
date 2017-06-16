@@ -16,8 +16,9 @@ import org.springframework.web.client.RestTemplate;
  */
 @Component
 public class RestTemplateFactory implements FactoryBean<RestTemplate> {
-  // TODO: Set 'http.conn-manager.timeout' to not wait infinitely for a
-  // connection from the pool
+  private static final int TIMEOUT_CONN_FROM_POOL_MILLIS = 3000;
+  private static final int TIMEOUT_CONN_ESTABLISHED_MILLIS = 3000;
+  private static final int TIMEOUT_CONN_SOCK_READ_MILLIS = 3000;
   private final CloseableHttpClient httpClient;
 
   public RestTemplateFactory() {
@@ -28,6 +29,9 @@ public class RestTemplateFactory implements FactoryBean<RestTemplate> {
   @Override
   public RestTemplate getObject() throws Exception {
     final HttpComponentsClientHttpRequestFactory clientRequestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
+    clientRequestFactory.setConnectionRequestTimeout(TIMEOUT_CONN_FROM_POOL_MILLIS);
+    clientRequestFactory.setConnectTimeout(TIMEOUT_CONN_ESTABLISHED_MILLIS);
+    clientRequestFactory.setReadTimeout(TIMEOUT_CONN_SOCK_READ_MILLIS);
     final RestTemplate restTemplate = new RestTemplate();
     restTemplate.setRequestFactory(clientRequestFactory);
 
