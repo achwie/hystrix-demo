@@ -46,8 +46,8 @@ public class LoginCommand implements HttpClientCommand<Boolean> {
     // We consume the HTTP entity in contrast to simply closing the response,
     // because this way HttpClient will try to re-use the connection, whereas
     // when closing the response the connection will be discarded. When doing
-    // lots of fast subsequent requests this prevents you from the OS using up
-    // all it's client-sockets, which will manifest it self in a
+    // lots of fast subsequent requests this prevents the OS from using up
+    // all it's client-sockets, which will manifest itself in a
     // SocketException. This is subtle, but it's mentioned in the docs at
     // https://hc.apache.org/httpcomponents-client-ga/tutorial/html/fundamentals.html
     EntityUtils.consume(response.getEntity());
