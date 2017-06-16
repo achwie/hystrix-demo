@@ -64,4 +64,58 @@ public class ServicesConfigTest {
 
     assertEquals(-1, uri.getPort());
   }
+
+  @Test
+  public void getProperty_shouldExpandVariables_whenVariablesInPropertyValue() {
+    Properties props = new Properties();
+    props.put("greeting", "Hello ${name}, you are ${person.attribute}!");
+    props.put("name", "Arnie");
+    props.put("person.attribute", "insanely strong");
+
+    final ServicesConfig config = new ServicesConfig(props);
+
+    final String greeting = config.getProperty("greeting");
+
+    assertEquals("Hello Arnie, you are insanely strong!", greeting);
+  }
+
+  @Test
+  public void getProperty_shouldExpandVariables_whenVariablesInPropertyValueAreNested() {
+    Properties props = new Properties();
+    props.put("greeting", "Hello ${name}, you are ${person.attribute}!");
+    props.put("name", "Arnie");
+    props.put("person.attribute", "really ${person.strength}");
+    props.put("person.strength", "insanely strong");
+
+    final ServicesConfig config = new ServicesConfig(props);
+
+    final String greeting = config.getProperty("greeting");
+
+    assertEquals("Hello Arnie, you are really insanely strong!", greeting);
+  }
+
+  @Test
+  public void getProperty_shouldNotExpandVariables_whenVariablesNotInPropertyValue() {
+    Properties props = new Properties();
+    props.put("greeting", "Hello ${name}!");
+    props.put("car", "BMW");
+
+    final ServicesConfig config = new ServicesConfig(props);
+
+    final String greeting = config.getProperty("greeting");
+
+    assertEquals("Hello ${name}!", greeting);
+  }
+
+  @Test
+  public void getProperty_shouldNotFail_whenVariableIsEmpty() {
+    Properties props = new Properties();
+    props.put("greeting", "Hello ${}!");
+
+    final ServicesConfig config = new ServicesConfig(props);
+
+    final String greeting = config.getProperty("greeting");
+
+    assertEquals("Hello ${}!", greeting);
+  }
 }

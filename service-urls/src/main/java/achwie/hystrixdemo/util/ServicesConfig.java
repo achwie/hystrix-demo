@@ -6,7 +6,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 
@@ -21,6 +25,7 @@ public class ServicesConfig {
   public static final String PROP_CART_BASEURL = "service.cart.baseurl";
   public static final String PROP_AUTH_BASEURL = "service.auth.baseurl";
   public static final String PROP_ORDER_BASEURL = "service.order.baseurl";
+  private static final Pattern REGEX_PROP_VARIABLE = Pattern.compile("\\$\\{([^\\}]+)\\}");
   private final Properties props;
 
   public ServicesConfig(Properties props) {
@@ -38,11 +43,14 @@ public class ServicesConfig {
   }
 
   public String getProperty(String key) {
-    return props.getProperty(key);
+    final String rawPropValue = props.getProperty(key);
+    final String propValuesWithExpandedVars = expandVariables(rawPropValue, props);
+
+    return propValuesWithExpandedVars;
   }
 
   public URI getPropertyAsURI(String key) throws URISyntaxException {
-    final String propValue = props.getProperty(key);
+    final String propValue = getProperty(key);
     URI uri = new URI(propValue);
 
     if (uri.getPort() == -1) {
@@ -63,5 +71,60 @@ public class ServicesConfig {
     }
 
     return uri;
+  }
+
+  private String expandVariables(String propValue, Properties variableProps) {
+    String beforeExpand;
+
+    // Support nested properties by expanding until there was no change anymore
+    do {
+      beforeExpand = propValue;
+      propValue = expandVariablesNoNested(propValue, variableProps);
+    } while (!beforeExpand.equals(propValue));
+
+    return propValue;
+  }
+
+  private String expandVariablesNoNested(String propValue, Properties variableProps) {
+    final Matcher m = REGEX_PROP_VARIABLE.matcher(propValue);
+
+    // Extract variable names from property
+    final Set<String> varNames = new HashSet<>();
+    while (m.find())
+      if (m.groupCount() > 0)
+        varNames.add(m.group(1));
+
+    // Replace variables with values in property
+    String expandedPropValue = propValue;
+    for (String varName : varNames) {
+      final String varValue = variableProps.getProperty(varName);
+      if (varValue != null) {
+        expandedPropValue = replaceAllNoRegex(expandedPropValue, varName, varValue);
+      }
+    }
+
+    return expandedPropValue;
+  }
+
+  /**
+   * Replaces all occurrences of {@code search} in {@code input} with
+   * {@code replacement}. In contrast to
+   * {@link String#replaceAll(String, String)} this method does not use regex
+   * matching, which can have undesired effects if your replacement string
+   * contains some special regex chars/sequences like "<code>${</code>".
+   *
+   * @param input The string to perform the replacement on.
+   * @param search The string to replace.
+   * @param replacement The string to replace {@code search} with.
+   * @return The given {@code input} with the replacements applied.
+   */
+  private String replaceAllNoRegex(String input, String search, String replacement) {
+    String beforeReplace;
+    do {
+      beforeReplace = input;
+      input = input.replace("${" + search + "}", replacement);
+    } while (!beforeReplace.equals(input));
+
+    return input;
   }
 }
