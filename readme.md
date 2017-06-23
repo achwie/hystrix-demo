@@ -24,7 +24,7 @@ There are also some modules related to configuration and the more technical thin
   
 And finally some modules for testing:
 
-  * `acceptance-tests`: a small set off user acceptance tests using the small and fine [JGiven](http://jgiven.org/)
+  * `acceptance-tests`: a small set of user acceptance tests using the small and fine [JGiven](http://jgiven.org/)
   * `load-generator`: generates load to simulate user traffic
 
 # Building
